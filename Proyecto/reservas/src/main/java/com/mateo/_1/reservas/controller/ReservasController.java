@@ -1,5 +1,6 @@
 package com.mateo._1.reservas.controller;
 
+import com.mateo._1.reservas.dto.ActualizarHabitacionDTO;
 import com.mateo._1.reservas.dto.CrearHabitacionDTO;
 import com.mateo._1.reservas.entity.Habitacion;
 import com.mateo._1.reservas.entity.Hotel;
@@ -63,5 +64,9 @@ public class ReservasController {
     @PostMapping("/habitacion/crear")
     public ResponseEntity<?> crearHabitacion(@RequestBody CrearHabitacionDTO crearHabitacionDTO) {
         return habitacionServiceImpl.crearHabitacion(crearHabitacionDTO);
+    }
+    @PatchMapping("/habitacion/actualizar")
+    public ResponseEntity<?> actualizarHabitacion(@RequestBody ActualizarHabitacionDTO actualizarHabitacionDTO){
+        return habitacionServiceImpl.actualizarHabitacion(actualizarHabitacionDTO);
     }
 }
