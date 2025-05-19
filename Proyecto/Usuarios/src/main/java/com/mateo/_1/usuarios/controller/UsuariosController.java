@@ -70,7 +70,7 @@ public class UsuariosController {
     @PostMapping("/validar")
     public ResponseEntity<Boolean> validarUsuario(@RequestBody UserNombreContrasenaDTO userNombreContrasenaDto) {
         boolean responseOk = false;
-        Usuario queryResult = usuariosServiceImpl.validarNombreConstrasena(userNombreContrasenaDto.getNombre(), userNombreContrasenaDto.getContrasena());
+        Usuario queryResult = usuariosServiceImpl.validarNombreConstrasena(userNombreContrasenaDto.getNombreUsuario(), userNombreContrasenaDto.getContrasenaUsuario());
         if (queryResult != null) {
             responseOk = true;
         }

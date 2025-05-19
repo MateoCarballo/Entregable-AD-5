@@ -18,7 +18,6 @@ import java.util.List;
 
 @Service
 public class ReservaService {
-    private final String URL_VALIDAR_CREDENCIALES = "http://localhost:8502/usuarios/credenciales";
     private final String URL_OBTENER_ID = "http://localhost:8502/usuarios/obtenerId";
 
     private ReservaRepository reservaRepositoryImpl;
@@ -36,14 +35,6 @@ public class ReservaService {
 
     //TODO REVISAR ESTA BASURA
     public String crearReserva(CrearReservaDTO crearReservaDTO) {
-        //1- Comprobar que los credenciales son correctos
-        UserNombreContrasenaDTO comprobarCredencialesDTO = UserNombreContrasenaDTO.builder()
-                .nombre(crearReservaDTO.getUsuarioNombre())
-                .contrasena(crearReservaDTO.getUsuarioContrasena())
-                .build();
-        if (!comprobarCredenciales(comprobarCredencialesDTO)) {
-            return ("Los credenciales no coinciden");
-        }
         //2- Comprobar que la habitacion existe
         Habitacion habitacion = habitacionRepositoryImpl.findById(crearReservaDTO.getHabitacionId()).orElse(null);
         if (habitacion == null) {
@@ -53,9 +44,15 @@ public class ReservaService {
         if (!crearReservaDTO.comprobarFechas()){ //Devuelve true si las fechas son coherentes
             return "Las fecha fin es previa a la fecha de inicio";
         }
+        //3.5- Creamos una dto para poder consultar en el microservicio de usuarios que id tiene asociado este user
+        UserNombreContrasenaDTO userNombreContrasenaDTO = UserNombreContrasenaDTO.builder()
+                .nombreUsuario(crearReservaDTO.getNombreUsuario())
+                .contrasenaUsuario(crearReservaDTO.getContrasenaUsuario())
+                .build();
+
         //4- Obtener desde el microservicio de usuarios el id asociado al nombre de usuario que llega
         Reserva reserva = Reserva.builder()
-                .usuarioId(obtenerIdUsuario(comprobarCredencialesDTO))
+                .usuarioId(obtenerIdUsuario(userNombreContrasenaDTO))
                 .habitacion(habitacion)
                 .fechaInicio(crearReservaDTO.getFechaInicio())
                 .fechaFin(crearReservaDTO.getFechaFin())
@@ -68,14 +65,7 @@ public class ReservaService {
     }
 
     public String cambiarEstado(CambiarEstadoReservaDTO cambiarEstadoReservaDTO) {
-        //1- Comprobar que los credenciales son correctos
-        UserNombreContrasenaDTO userNombreContrasenaDTO = UserNombreContrasenaDTO.builder()
-                .nombre(cambiarEstadoReservaDTO.getNombre())
-                .contrasena(cambiarEstadoReservaDTO.getContrasena())
-                .build();
-        if (!comprobarCredenciales(userNombreContrasenaDTO)) {
-            return ("Los credenciales no coinciden");
-        }
+        //1- Comprobados credenciales antes de llegar aqui
         //2- Comprobar que la habitacion existe
         Reserva reserva = reservaRepositoryImpl.findById(cambiarEstadoReservaDTO.getReserva_id()).orElse(null);
         if (reserva == null) {
@@ -86,33 +76,14 @@ public class ReservaService {
         String estadoAnterior = reserva.getEstado();
        if (!Arrays.asList(posiblesEstados).contains(cambiarEstadoReservaDTO.getEstadoReserva())) return "El nuevo estado no es valido";
         reserva.setEstado(cambiarEstadoReservaDTO.getEstadoReserva());
+        //5- Guardar la nueva reserva
+        reservaRepositoryImpl.save(reserva);
         return "El estado de la reserva ha cambiado de " + estadoAnterior + " a " + reserva.getEstado();
     }
 
-    /*
-    ##########################################################################
-    METODO PARA COMPROBAR LOS CREDENCIALES CONTRA EL MICROSERVICIO DE USUARIOS
-    ##########################################################################
-     */
-
-    public boolean comprobarCredenciales(UserNombreContrasenaDTO userNombreContrasenaDTO){
-        //0 INICIALIZAR template para preguntar al microservicio de usuarios
-        RestTemplate restTemplate = new RestTemplate();
-        //1- Contruir un nuevo dto para validar credenciales
-        UserNombreContrasenaDTO usuario = UserNombreContrasenaDTO.builder()
-                .nombre(userNombreContrasenaDTO.getNombre())
-                .contrasena(userNombreContrasenaDTO.getContrasena())
-                .build();
-        //2 Preguntar al microservicio si son validos o no
-        ResponseEntity<Boolean> response = restTemplate.postForEntity(URL_VALIDAR_CREDENCIALES, usuario, Boolean.class);
-        //Devolver si es o no valido
-        return Boolean.TRUE.equals(response.getBody());
-    }
-    public int obtenerIdUsuario(UserNombreContrasenaDTO UserNombreContrasenaDTO){
+    private int obtenerIdUsuario(UserNombreContrasenaDTO UserNombreContrasenaDTO){
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<UserNombreIdDTO> response = restTemplate.postForEntity(URL_OBTENER_ID, UserNombreContrasenaDTO, UserNombreIdDTO.class);
         return response.getBody().getId();
     }
-
-
 }

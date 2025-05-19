@@ -10,5 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ObtenerIdApartirNombreDTO {
+    private String nombreUsuario;
+    private String contrasenaUsuario;
     private String nombre;
 }

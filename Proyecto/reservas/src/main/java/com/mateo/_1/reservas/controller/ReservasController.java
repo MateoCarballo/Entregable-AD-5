@@ -1,8 +1,6 @@
 package com.mateo._1.reservas.controller;
 
 import com.mateo._1.reservas.dto.*;
-import com.mateo._1.reservas.exceptions.CredencialesIncorrectosException;
-import com.mateo._1.reservas.exceptions.HabitacionNotFoundException;
 import com.mateo._1.reservas.service.HabitacionService;
 import com.mateo._1.reservas.service.HotelService;
 import com.mateo._1.reservas.service.ReservaService;
@@ -10,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("/reservas")
 public class ReservasController {
+    private final String URL_VALIDAR_CREDENCIALES = "http://localhost:8502/usuarios/credenciales";
+
     private ReservaService reservaServiceImpl;
     private HotelService hotelServiceImpl;
     private HabitacionService habitacionServiceImpl;
@@ -60,6 +61,9 @@ public class ReservasController {
      */
     @PostMapping("/habitacion/crear")
     public ResponseEntity<?> crearHabitacion(@RequestBody CrearHabitacionDTO crearHabitacionDTO) {
+        if (!validarCredenciales(crearHabitacionDTO.getNombreUsuario(), crearHabitacionDTO.getContrasenaUsuario())) return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("Los credenciales no son correctos.");
         return ResponseEntity.ok(habitacionServiceImpl.crearHabitacion(crearHabitacionDTO));
     }
 
@@ -74,6 +78,9 @@ public class ReservasController {
 
     @PatchMapping("/habitacion")
     public ResponseEntity<?> actualizarHabitacion(@RequestBody ActualizarHabitacionDTO actualizarHabitacionDTO) {
+        if (!validarCredenciales(actualizarHabitacionDTO.getNombreUsuario(), actualizarHabitacionDTO.getContrasenaUsuario())) return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("Los credenciales no son correctos.");;
         return ResponseEntity.ok(habitacionServiceImpl.actualizarHabitacion(actualizarHabitacionDTO));
     }
 
@@ -93,6 +100,9 @@ public class ReservasController {
      */
     @PostMapping("/hotel")
     public ResponseEntity<?> crearHotel(@RequestBody CrearHotelDTO crearHotelDTO) {
+        if (!validarCredenciales(crearHotelDTO.getNombreUsuario(), crearHotelDTO.getContrasenaUsuario())) return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("Los credenciales no son correctos.");
         return ResponseEntity.ok(hotelServiceImpl.crearHotel(crearHotelDTO));
     }
 
@@ -106,6 +116,9 @@ public class ReservasController {
      */
     @PatchMapping("/hotel")
     public ResponseEntity<?> actualizarHotel(@RequestBody ActualizarHotelDTO actualizarHotelDTO) {
+        if (!validarCredenciales(actualizarHotelDTO.getNombreUsuario(), actualizarHotelDTO.getContrasenaUsuario())) return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("Los credenciales no son correctos.");
         return ResponseEntity.ok(hotelServiceImpl.actualiazarHotel(actualizarHotelDTO));
     }
 
@@ -133,6 +146,9 @@ public class ReservasController {
     //TODO preguntar Jose, es necesario crear una dto para esto ??
     @PostMapping("/hotel/id")
     public ResponseEntity<?> obtenerIdApartirNombre(@RequestBody ObtenerIdApartirNombreDTO obtenerIdApartirNombreDTO) {
+        if (!validarCredenciales(obtenerIdApartirNombreDTO.getNombreUsuario(), obtenerIdApartirNombreDTO.getContrasenaUsuario())) return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("Los credenciales no son correctos.");
         return ResponseEntity.ok(hotelServiceImpl.obtenerIdApartirNombre(obtenerIdApartirNombreDTO));
     }
 
@@ -162,6 +178,9 @@ public class ReservasController {
 
     @PostMapping("/reserva")
     public ResponseEntity<?> crearReserva(@RequestBody CrearReservaDTO crearReservaDTO) {
+        if (!validarCredenciales(crearReservaDTO.getNombreUsuario(), crearReservaDTO.getContrasenaUsuario())) return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("Los credenciales no son correctos.");
         return ResponseEntity.ok(reservaServiceImpl.crearReserva(crearReservaDTO));
     }
 
@@ -175,7 +194,32 @@ public class ReservasController {
      */
     @PatchMapping("/reserva")
     public ResponseEntity<?> cambiarEstado(@RequestBody CambiarEstadoReservaDTO cambiarEstadoReservaDTO) {
+        if (!validarCredenciales(cambiarEstadoReservaDTO.getNombreUsuario(), cambiarEstadoReservaDTO.getContrasenaUsuario())) return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("Los credenciales no son correctos.");
         return ResponseEntity.ok(reservaServiceImpl.cambiarEstado(cambiarEstadoReservaDTO));
+    }
+
+    private boolean validarCredenciales(String nombre, String  contrasena){
+        UserNombreContrasenaDTO comprobarCredencialesDTO = UserNombreContrasenaDTO.builder()
+                .nombreUsuario(nombre)
+                .contrasenaUsuario(contrasena)
+                .build();
+        return validarEnMicroServicioUsuarios(comprobarCredencialesDTO);
+    }
+
+    private boolean validarEnMicroServicioUsuarios(UserNombreContrasenaDTO userNombreContrasenaDTO){
+        //0 INICIALIZAR template para preguntar al microservicio de usuarios
+        RestTemplate restTemplate = new RestTemplate();
+        //1- Contruir un nuevo dto para validar credenciales
+        UserNombreContrasenaDTO usuario = UserNombreContrasenaDTO.builder()
+                .nombreUsuario(userNombreContrasenaDTO.getNombreUsuario())
+                .contrasenaUsuario(userNombreContrasenaDTO.getContrasenaUsuario())
+                .build();
+        //2 Preguntar al microservicio si son validos o no
+        ResponseEntity<Boolean> response = restTemplate.postForEntity(URL_VALIDAR_CREDENCIALES, usuario, Boolean.class);
+        //Devolver si es o no valido
+        return Boolean.TRUE.equals(response.getBody());
     }
 }
 

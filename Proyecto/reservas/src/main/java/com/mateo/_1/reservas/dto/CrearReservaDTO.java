@@ -15,8 +15,8 @@ public class CrearReservaDTO {
     private int habitacionId;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
-    private String usuarioNombre;
-    private String usuarioContrasena;
+    private String nombreUsuario;
+    private String contrasenaUsuario;
 
     public boolean comprobarFechas(){
         return(fechaFin.isAfter(fechaInicio));

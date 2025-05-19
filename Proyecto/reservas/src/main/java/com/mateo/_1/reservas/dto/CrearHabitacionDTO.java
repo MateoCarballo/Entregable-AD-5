@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class CrearHabitacionDTO {
     //(numeroHabitacion, tipo, precio y idHotel)
+    private String nombreUsuario;
+    private String contrasenaUsuario;
     private int numeroHabitacion;
     private TipoHabitacion tipo;
     private BigDecimal precio;

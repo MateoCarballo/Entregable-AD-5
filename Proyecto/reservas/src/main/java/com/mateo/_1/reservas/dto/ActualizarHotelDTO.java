@@ -12,5 +12,7 @@ import lombok.NoArgsConstructor;
 public class ActualizarHotelDTO {
     private int id;
     private String nombre;
+    private String nombreUsuario;
+    private String contrasenaUsuario;
     private String direccion;
 }

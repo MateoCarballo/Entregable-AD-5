@@ -6,7 +6,6 @@ import com.mateo._1.usuarios.entity.UserNombreIdDTO;
 import com.mateo._1.usuarios.entity.Usuario;
 import com.mateo._1.usuarios.repository.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,8 +49,8 @@ public class UsuariosService {
     public String eliminarUsuario(UserNombreContrasenaDTO userNombreContrasenaDto) {
         String response = "No se ha encontrado ningun usuario con este nombre y constrasena";
         Usuario usuario = usuariosRepositoryImpl.findByNombreAndContrasena(
-                userNombreContrasenaDto.getNombre(),
-                userNombreContrasenaDto.getContrasena()
+                userNombreContrasenaDto.getNombreUsuario(),
+                userNombreContrasenaDto.getContrasenaUsuario()
         ).orElse(null);
 
         if (usuario != null) {
@@ -79,12 +78,12 @@ public class UsuariosService {
 
     public boolean validarCredenciales(UserNombreContrasenaDTO userNombreContrasenaDto) {
         return usuariosRepositoryImpl
-                .findByNombreAndContrasena(userNombreContrasenaDto.getNombre(), userNombreContrasenaDto.getContrasena())
+                .findByNombreAndContrasena(userNombreContrasenaDto.getNombreUsuario(), userNombreContrasenaDto.getContrasenaUsuario())
                 .isPresent();
     }
 
     public UserNombreIdDTO obtenerUserId(UserNombreContrasenaDTO userNombreContrasenaDTO) {
-        Usuario usuario = usuariosRepositoryImpl.findByNombre(userNombreContrasenaDTO.getNombre()).orElse(null);
+        Usuario usuario = usuariosRepositoryImpl.findByNombre(userNombreContrasenaDTO.getNombreUsuario()).orElse(null);
         if(usuario == null) return null;
         UserNombreIdDTO userToRepond = UserNombreIdDTO.builder()
                 .id(usuario.getId())

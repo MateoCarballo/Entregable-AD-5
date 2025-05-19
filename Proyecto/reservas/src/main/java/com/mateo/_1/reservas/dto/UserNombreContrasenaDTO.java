@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 
 public class UserNombreContrasenaDTO {
-    private String nombre;
-    private String contrasena;
+    private String nombreUsuario;
+    private String contrasenaUsuario;
 }
