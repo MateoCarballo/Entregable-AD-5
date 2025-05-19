@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.5</version> <!-- Usa una versión compatible con Spring Cloud -->
+        <relativePath/> <!-- Busca en el repo central -->
+    </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.example</groupId>      <!-- Nombre del paquete-->
     <artifactId>proyectos</artifactId><!-- Nombre del proyecto-->
@@ -10,9 +16,10 @@
     <modules> <!-- Nombre de los módulos-->
         <module>usuarios</module>
         <module>reservas</module>
+        <module>eureka-server</module>
     </modules>
     <properties> <!-- Propiedades del proyecto-->
-        <java.version>24</java.version>
+        <java.version>17</java.version>
         <spring-cloud.version>2023.0.0</spring-cloud.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
