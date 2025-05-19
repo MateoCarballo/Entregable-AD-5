@@ -12,12 +12,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class CrearReservaDTO {
-    private int id;
-    private int usuarioId;
     private int habitacionId;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
-    private String estado;
     private String usuarioNombre;
     private String usuarioContrasena;
 

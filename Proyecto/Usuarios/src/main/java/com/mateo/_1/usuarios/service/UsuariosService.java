@@ -2,10 +2,11 @@ package com.mateo._1.usuarios.service;
 
 import com.mateo._1.usuarios.entity.UserCompleteDTO;
 import com.mateo._1.usuarios.entity.UserNombreContrasenaDTO;
+import com.mateo._1.usuarios.entity.UserNombreIdDTO;
 import com.mateo._1.usuarios.entity.Usuario;
-import com.mateo._1.usuarios.exceptions.UsuarioNotFoundException;
 import com.mateo._1.usuarios.repository.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -80,6 +81,16 @@ public class UsuariosService {
         return usuariosRepositoryImpl
                 .findByNombreAndContrasena(userNombreContrasenaDto.getNombre(), userNombreContrasenaDto.getContrasena())
                 .isPresent();
+    }
+
+    public UserNombreIdDTO obtenerUserId(UserNombreContrasenaDTO userNombreContrasenaDTO) {
+        Usuario usuario = usuariosRepositoryImpl.findByNombre(userNombreContrasenaDTO.getNombre()).orElse(null);
+        if(usuario == null) return null;
+        UserNombreIdDTO userToRepond = UserNombreIdDTO.builder()
+                .id(usuario.getId())
+                .nombre(usuario.getNombre())
+                .build();
+        return userToRepond;
     }
     /*
         Usuario usuario = usuariosRepositoryImpl

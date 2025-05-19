@@ -17,7 +17,7 @@ public interface UsuariosRepository extends JpaRepository<Usuario, Integer> {
 
     Optional<Usuario> deleteByNombreAndContrasena(String nombre,String contrasena);
 
-    @Query("SELECT u FROM Usuario u WHERE u.nombre = :nombre AND u.correo_electronico = :correoelectronico AND u.direccion = :direccion  AND u.contrasena = :contrasena")
+    @Query("SELECT u FROM Usuario u WHERE u.nombre = :nombre AND u.correo_electronico = :correo_electronico AND u.direccion = :direccion  AND u.contrasena = :contrasena")
     Optional<Usuario> findByCompleteUserDTO(
             @Param("nombre")String nombre,
             @Param("correo_electronico")String correoelectronico,

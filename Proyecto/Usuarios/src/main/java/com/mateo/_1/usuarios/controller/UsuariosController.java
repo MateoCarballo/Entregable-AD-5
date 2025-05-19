@@ -2,6 +2,7 @@ package com.mateo._1.usuarios.controller;
 
 import com.mateo._1.usuarios.entity.UserCompleteDTO;
 import com.mateo._1.usuarios.entity.UserNombreContrasenaDTO;
+import com.mateo._1.usuarios.entity.UserNombreIdDTO;
 import com.mateo._1.usuarios.entity.Usuario;
 import com.mateo._1.usuarios.service.UsuariosService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,20 @@ public class UsuariosController {
     @PostMapping("/credenciales")
     public boolean credenciales(@RequestBody UserNombreContrasenaDTO userNombreContrasenaDto) {
         return usuariosServiceImpl.validarCredenciales(userNombreContrasenaDto);
+    }
+
+    //Este endpoint me devuelve el id necesario para insertarlo en la reserva del microservicio de reservas
+    /*
+    asi lo "llamo" desde el microservicio de reservas
+    public int obtenerIdUsuario(UserNombreContrasenaDTO UserNombreContrasenaDTO){
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<UserNombreIdDTO> response = restTemplate.postForEntity(URL_OBTENER_ID, UserNombreContrasenaDTO, UserNombreIdDTO.class);
+        return response.getBody().getId();
+    }
+     */
+    @PostMapping("/obtenerId")
+    public UserNombreIdDTO obtenerId(@RequestBody UserNombreContrasenaDTO userNombreContrasenaDTO) {
+        return usuariosServiceImpl.obtenerUserId(userNombreContrasenaDTO);
     }
 
     @PostMapping("/registrar")

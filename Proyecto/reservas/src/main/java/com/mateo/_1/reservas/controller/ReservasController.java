@@ -74,7 +74,7 @@ public class ReservasController {
 
     @PatchMapping("/habitacion")
     public ResponseEntity<?> actualizarHabitacion(@RequestBody ActualizarHabitacionDTO actualizarHabitacionDTO) {
-        return  ResponseEntity.ok(habitacionServiceImpl.actualizarHabitacion(actualizarHabitacionDTO));
+        return ResponseEntity.ok(habitacionServiceImpl.actualizarHabitacion(actualizarHabitacionDTO));
     }
 
     @DeleteMapping("/habitacion/{id}")
@@ -131,8 +131,8 @@ public class ReservasController {
     Devolverá una cadena indicando el ID del hotel en cuestión.
      */
     //TODO preguntar Jose, es necesario crear una dto para esto ??
-    @PostMapping ("/hotel/id")
-    public ResponseEntity<?> obtenerIdApartirNombre(@RequestBody ObtenerIdApartirNombreDTO obtenerIdApartirNombreDTO){
+    @PostMapping("/hotel/id")
+    public ResponseEntity<?> obtenerIdApartirNombre(@RequestBody ObtenerIdApartirNombreDTO obtenerIdApartirNombreDTO) {
         return ResponseEntity.ok(hotelServiceImpl.obtenerIdApartirNombre(obtenerIdApartirNombreDTO));
     }
 
@@ -146,7 +146,7 @@ public class ReservasController {
      */
 
     @PostMapping("/hotel/nombre/{id}")
-    public ResponseEntity<?> obtenerNombreAPartirId(@PathVariable int id){
+    public ResponseEntity<?> obtenerNombreAPartirId(@PathVariable int id) {
         return ResponseEntity.ok(hotelServiceImpl.obtenerNombreAPartirId(id));
     }
 
@@ -160,17 +160,9 @@ public class ReservasController {
     Devolverá una cadena indicando si la operación se completó correctamente o si hubo algún fallo.
     */
 
-    @PostMapping("/reservas")
-    public ResponseEntity<?> crearReserva(@RequestBody CrearReservaDTO crearReservaDTO){
-        try {
-            return ResponseEntity.ok(reservaServiceImpl.crearReserva(crearReservaDTO));
-        }catch (CredencialesIncorrectosException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        }catch (HabitacionNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear la reserva");
-        }
+    @PostMapping("/reserva")
+    public ResponseEntity<?> crearReserva(@RequestBody CrearReservaDTO crearReservaDTO) {
+        return ResponseEntity.ok(reservaServiceImpl.crearReserva(crearReservaDTO));
     }
 
     /*
@@ -181,10 +173,9 @@ public class ReservasController {
     Recibirá un objeto con la información de la reserva (reserva_id y estado)
     Devolverá una cadena indicando si la operación se completó correctamente o si hubo algún fallo.
      */
-    @PatchMapping("/reservas")
-    public ResponseEntity<?> cambiarEstado(CambiarEstadoReservaDTO cambiarEstadoReservaDTO) {
+    @PatchMapping("/reserva")
+    public ResponseEntity<?> cambiarEstado(@RequestBody CambiarEstadoReservaDTO cambiarEstadoReservaDTO) {
         return ResponseEntity.ok(reservaServiceImpl.cambiarEstado(cambiarEstadoReservaDTO));
     }
-
-    }
 }
+
