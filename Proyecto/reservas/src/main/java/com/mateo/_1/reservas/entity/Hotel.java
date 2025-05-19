@@ -10,8 +10,9 @@ import java.util.List;
 @Entity
 @Table(name = "hotel")
 @Data
-@AllArgsConstructor //Genera un constructor con todos los campos de la clase como parámetros.
-@NoArgsConstructor //Genera un constructor sin parámetros, es decir, el constructor vacío.
+@AllArgsConstructor //Genera un constructor con todos los parametros
+@NoArgsConstructor //Genera un constructor sin parámetros (constructor vacío.)
+@Builder
 
 public class Hotel {
     @Id
