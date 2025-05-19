@@ -1,6 +1,7 @@
 package com.mateo._1.reservas.service;
 
 import com.mateo._1.reservas.dto.ActualizarHabitacionDTO;
+import com.mateo._1.reservas.dto.CheckReservaDTO;
 import com.mateo._1.reservas.dto.CrearHabitacionDTO;
 import com.mateo._1.reservas.dto.UserNombreContrasenaDTO;
 import com.mateo._1.reservas.entity.Habitacion;

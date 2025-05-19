@@ -1,6 +1,7 @@
 package com.mateo._1.reservas.service;
 
 import com.mateo._1.reservas.dto.ActualizarHotelDTO;
+import com.mateo._1.reservas.dto.CheckReservaDTO;
 import com.mateo._1.reservas.dto.CrearHotelDTO;
 import com.mateo._1.reservas.dto.ObtenerIdApartirNombreDTO;
 import com.mateo._1.reservas.entity.Hotel;

@@ -1,9 +1,6 @@
 package com.mateo._1.reservas.service;
 
-import com.mateo._1.reservas.dto.CambiarEstadoReservaDTO;
-import com.mateo._1.reservas.dto.CrearReservaDTO;
-import com.mateo._1.reservas.dto.UserNombreContrasenaDTO;
-import com.mateo._1.reservas.dto.UserNombreIdDTO;
+import com.mateo._1.reservas.dto.*;
 import com.mateo._1.reservas.entity.Habitacion;
 import com.mateo._1.reservas.entity.Reserva;
 import com.mateo._1.reservas.repository.HabitacionRepository;
@@ -31,6 +28,12 @@ public class ReservaService {
 
     public List<Reserva> devolverTodos(){
         return reservaRepositoryImpl.findAll();
+    }
+
+    private int obtenerIdUsuario(UserNombreContrasenaDTO UserNombreContrasenaDTO){
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<UserNombreIdDTO> response = restTemplate.postForEntity(URL_OBTENER_ID, UserNombreContrasenaDTO, UserNombreIdDTO.class);
+        return response.getBody().getId();
     }
 
     //TODO REVISAR ESTA BASURA
@@ -81,9 +84,26 @@ public class ReservaService {
         return "El estado de la reserva ha cambiado de " + estadoAnterior + " a " + reserva.getEstado();
     }
 
-    private int obtenerIdUsuario(UserNombreContrasenaDTO UserNombreContrasenaDTO){
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<UserNombreIdDTO> response = restTemplate.postForEntity(URL_OBTENER_ID, UserNombreContrasenaDTO, UserNombreIdDTO.class);
-        return response.getBody().getId();
+    public List<Reserva> listarReservasPorUsuario(ListarReservasDTO listarReservasDto) {
+        UserNombreContrasenaDTO userNombreContrasenaDTO = UserNombreContrasenaDTO.builder()
+                .nombreUsuario(listarReservasDto.getNombreUsuario())
+                .contrasenaUsuario(listarReservasDto.getContrasenaUsuario())
+                .build();
+
+        int idUsuario = obtenerIdUsuario(userNombreContrasenaDTO);
+        return reservaRepositoryImpl.findAllByUsuarioId(idUsuario);
+    }
+
+    public List<Reserva> listarReservasPorEstado(String estado) {
+        return reservaRepositoryImpl.findAllByEstado(estado);
+    }
+
+    public boolean checkReserva(CheckReservaDTO checkReservaDTO) {
+        return reservaRepositoryImpl
+                .existsByReservaIdAndUsuarioIdAndHabitacion_Hotel_Id(
+                        checkReservaDTO.getIdReserva(),
+                        checkReservaDTO.getIdUsuario(),
+                        checkReservaDTO.getIdHotel()
+                );
     }
 }
