@@ -18,6 +18,8 @@ public class CrearReservaDTO {
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
     private String estado;
+    private String usuarioNombre;
+    private String usuarioContrasena;
 
     public boolean comprobarFechas(){
         return(fechaFin.isAfter(fechaInicio));

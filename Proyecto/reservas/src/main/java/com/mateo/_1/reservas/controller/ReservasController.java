@@ -7,13 +7,11 @@ import com.mateo._1.reservas.service.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("/reservas")
 public class ReservasController {
-    private final String OPERATION_ERROR_MSG = "No se ha podido realizar la accion";
-    private final String OPERATION_COMPLETE_MSG = "Accion realizada con exito";
-
     private ReservaService reservaServiceImpl;
     private HotelService hotelServiceImpl;
     private HabitacionService habitacionServiceImpl;
@@ -162,8 +160,7 @@ public class ReservasController {
 
     @PostMapping("/reservas")
     public ResponseEntity<?> crearReserva(@RequestBody CrearReservaDTO crearReservaDTO){
-        reservaServiceImpl.crearReserva(crearReservaDTO);
-        return ResponseEntity.ok("Reserva creada con exito!");
+        return ResponseEntity.ok(reservaServiceImpl.crearReserva(crearReservaDTO);
     }
 
 }

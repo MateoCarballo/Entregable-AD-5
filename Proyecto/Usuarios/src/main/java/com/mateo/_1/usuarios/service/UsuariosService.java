@@ -3,6 +3,7 @@ package com.mateo._1.usuarios.service;
 import com.mateo._1.usuarios.entity.UserCompleteDTO;
 import com.mateo._1.usuarios.entity.UserNombreContrasenaDTO;
 import com.mateo._1.usuarios.entity.Usuario;
+import com.mateo._1.usuarios.exceptions.UsuarioNotFoundException;
 import com.mateo._1.usuarios.repository.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class UsuariosService {
 
     public String actualizarUsuario(UserCompleteDTO userCompleteDTO) {
         String cadenaResultado = "No existe el usuario que se desea modificar";
-        Usuario usuario =usuariosRepositoryImpl.findById(userCompleteDTO.getU_id()).orElse(null);
+        Usuario usuario = usuariosRepositoryImpl.findById(userCompleteDTO.getU_id()).orElse(null);
         if (usuario != null) {
             //Cargamos los nuevos valoresd desde el DTO para modificar el usuario y lo guardamos nuevamente
             usuario.setNombre(userCompleteDTO.getU_nombre());
@@ -50,9 +51,9 @@ public class UsuariosService {
         Usuario usuario = usuariosRepositoryImpl.findByNombreAndContrasena(
                 userNombreContrasenaDto.getNombre(),
                 userNombreContrasenaDto.getContrasena()
-                ).orElse(null);
+        ).orElse(null);
 
-        if( usuario != null ){
+        if (usuario != null) {
             usuariosRepositoryImpl.delete(usuario);
             response = "Usuario eliminado con exito";
         }
@@ -74,4 +75,15 @@ public class UsuariosService {
     public Usuario comprobarId(int id) {
         return usuariosRepositoryImpl.findById(id).orElse(null);
     }
+
+    public boolean validarCredenciales(UserNombreContrasenaDTO userNombreContrasenaDto) {
+        return usuariosRepositoryImpl
+                .findByNombreAndContrasena(userNombreContrasenaDto.getNombre(), userNombreContrasenaDto.getContrasena())
+                .isPresent();
+    }
+    /*
+        Usuario usuario = usuariosRepositoryImpl
+                .findByNombreAndContrasena(userNombreContrasenaDto.getNombre(), userNombreContrasenaDto.getContrasena())
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuario y contraseña no coinciden"));
+         */
 }

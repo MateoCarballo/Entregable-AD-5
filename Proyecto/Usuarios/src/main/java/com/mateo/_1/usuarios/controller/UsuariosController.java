@@ -18,9 +18,22 @@ public class UsuariosController {
         this.usuariosServiceImpl = usuariosServiceImpl;
     }
 
+    //END POINTS UTILES PARA COMPROBACIONES PREVIAS
     @GetMapping("/todos")
     public ResponseEntity<?> obtenerTodosLosUsuarios() {
         return ResponseEntity.ok(usuariosServiceImpl.obtenerTodosLosUsuarios());
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok("La aplicación está funcionando correctamente");
+    }
+
+    //END POINT PARA USAR DESDE RESERVAS Y VALIDAR LOS CREDENCIALES DE LOS USUARIOS
+    //Es lo mismo que el otro pero para no interrumpir y que solo me devuelva un boolean le hago otro
+    @PostMapping("/credenciales")
+    public boolean credenciales(@RequestBody UserNombreContrasenaDTO userNombreContrasenaDto) {
+        return usuariosServiceImpl.validarCredenciales(userNombreContrasenaDto);
     }
 
     @PostMapping("/registrar")
@@ -73,8 +86,5 @@ public class UsuariosController {
         }
         return ResponseEntity.ok(exist);
     }
-    @GetMapping("/test")
-    public ResponseEntity<String> test() {
-        return ResponseEntity.ok("La aplicación está funcionando correctamente");
+
     }
-}
