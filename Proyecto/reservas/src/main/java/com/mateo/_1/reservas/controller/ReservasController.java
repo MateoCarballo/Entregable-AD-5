@@ -151,6 +151,19 @@ public class ReservasController {
     }
 
     //RESERVAS
+    /*
+    Crear reserva (crearReserva):
+    Se encargará de crear una nueva reserva.
+    URL de ejecución: la ruta raíz del microservicio.
+    Mét0do de consulta: POST.
+    Recibirá un objeto con la información de la reserva (fecha_inicio, fecha_fin y habitacion_id)
+    Devolverá una cadena indicando si la operación se completó correctamente o si hubo algún fallo.
+    */
 
-    
+    @PostMapping("/reservas")
+    public ResponseEntity<?> crearReserva(@RequestBody CrearReservaDTO crearReservaDTO){
+        reservaServiceImpl.crearReserva(crearReservaDTO);
+        return ResponseEntity.ok("Reserva creada con exito!");
+    }
+
 }
