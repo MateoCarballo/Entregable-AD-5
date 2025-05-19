@@ -1,5 +1,6 @@
 package com.mateo._1.reservas.service;
 
+import com.mateo._1.reservas.dto.CambiarEstadoReservaDTO;
 import com.mateo._1.reservas.dto.CrearReservaDTO;
 import com.mateo._1.reservas.dto.UserNombreContrasenaDTO;
 import com.mateo._1.reservas.entity.Habitacion;
@@ -31,27 +32,23 @@ public class ReservaService {
         return reservaRepositoryImpl.findAll();
     }
 
+    //TODO REVISAR ESTA BASURA
     public String crearReserva(CrearReservaDTO crearReservaDTO) {
-        //0 INICIALIZAR template para preguntar al microservicio de usuarios
-        RestTemplate restTemplate = new RestTemplate();
-
-        //1- Contruir un nuevo dto para validar credenciales
-        UserNombreContrasenaDTO usuario = UserNombreContrasenaDTO.builder()
+        UserNombreContrasenaDTO comprobarCredencialesDTO = UserNombreContrasenaDTO.builder()
                 .nombre(crearReservaDTO.getUsuarioNombre())
                 .contrasena(crearReservaDTO.getUsuarioContrasena())
                 .build();
-        //2 Preguntar al microservicio si son validos o no
-        ResponseEntity<Boolean> response = restTemplate.postForEntity(URL_VALIDAR_CREDENCIALES, usuario, Boolean.class);
-
-        //3 Si son validos continua con el proceso si no lanzar una excepcion indicando que problema tenemos
-        if (!Boolean.TRUE.equals(response.getBody())) {
-           throw new CredencialesIncorrectosException("Los credenciales para el usuario " + crearReservaDTO.getUsuarioNombre() + " no son correctos revíselos");
+        if (!comprobarCredenciales(comprobarCredencialesDTO)) {
+            return ("Los credenciales no coinciden");
         }
-
-        //4 Encontrar el objeto habitacion que tiene ese id
 
         Habitacion habitacion = habitacionRepositoryImpl.findById(crearReservaDTO.getHabitacionId())
                 .orElseThrow(()-> new HabitacionNotFoundException("El id de la habitacion no existe"));
+
+        //DEBERIAMOS COMPROBAR QUE LAS FECHAS ESTEN BIEN COLOCADAS
+        if (!crearReservaDTO.comprobarFechas()){ //Devuelve true si las fechas son coherentes
+            return "Las fecha fin es previa a la fecha de inicio";
+        }
 
         Reserva reserva = Reserva.builder()
                 .usuarioId(crearReservaDTO.getUsuarioId())
@@ -62,7 +59,50 @@ public class ReservaService {
                 .build();
 
         reservaRepositoryImpl.save(reserva);
-    //TODO trabajando aqui !
-        return "Reserva creada con exito!";
+       return "Reserva creada con éxito!";
+    }
+
+    public String cambiarEstado(CambiarEstadoReservaDTO cambiarEstadoReservaDTO) {
+        //Creamos un nuevo DTO para comprobar los credenciales en usuarios
+        UserNombreContrasenaDTO comprobarCredencialesDTO = UserNombreContrasenaDTO.builder()
+                .nombre(cambiarEstadoReservaDTO.getNombre())
+                .contrasena(cambiarEstadoReservaDTO.getContrasena())
+                .build();
+        if (!comprobarCredenciales(comprobarCredencialesDTO)) {
+            return ("Los credenciales no coinciden");
+        }
+
+        Reserva reserva = reservaRepositoryImpl.findById(cambiarEstadoReservaDTO.getReserva_id()).orElse(null);
+        if (reserva == null) return "No se ha encontrado ninguna reserva con el id indicado "  + cambiarEstadoReservaDTO.getReserva_id();
+
+        reserva.setEstado(cambiarEstadoReservaDTO.getEstadoReserva());
+        reservaRepositoryImpl.save(reserva);
+        return "El estado de la reserva ha cambiado de " + "" + " a " + "";
+    }
+
+
+    /*
+    ##########################################################################
+    METODO PARA COMPROBAR LOS CREDENCIALES CONTRA EL MICROSERVICIO DE USUARIOS
+    ##########################################################################
+     */
+
+    public boolean comprobarCredenciales(UserNombreContrasenaDTO userNombreContrasenaDTO){
+        //0 INICIALIZAR template para preguntar al microservicio de usuarios
+        RestTemplate restTemplate = new RestTemplate();
+
+        //1- Contruir un nuevo dto para validar credenciales
+        UserNombreContrasenaDTO usuario = UserNombreContrasenaDTO.builder()
+                .nombre(userNombreContrasenaDTO.getNombre())
+                .contrasena(userNombreContrasenaDTO.getContrasena())
+                .build();
+        //2 Preguntar al microservicio si son validos o no
+        ResponseEntity<Boolean> response = restTemplate.postForEntity(URL_VALIDAR_CREDENCIALES, usuario, Boolean.class);
+
+        //3 Si son validos continua con el proceso si no lanzar una excepcion indicando que problema tenemos
+        if (!Boolean.TRUE.equals(response.getBody())) {
+            throw new CredencialesIncorrectosException("Error al comprobar los credenciales del usuario " + userNombreContrasenaDTO.getNombre() + " revíselos");
+        }
+        return Boolean.TRUE.equals(response.getBody());
     }
 }

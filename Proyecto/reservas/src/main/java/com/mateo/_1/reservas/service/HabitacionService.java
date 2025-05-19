@@ -32,7 +32,7 @@ public class HabitacionService {
         return habitacionRepositoryImpl.findAll();
     }
 
-    public ResponseEntity<?> crearHabitacion(CrearHabitacionDTO crearHabitacionDTO) {
+    public String crearHabitacion(CrearHabitacionDTO crearHabitacionDTO) {
         Hotel hotel = hotelRepositoryImpl.findById(crearHabitacionDTO.getIdHotel())
                 .orElseThrow(() -> new HotelNotFoundException("Hotel con ID " + crearHabitacionDTO.getIdHotel() + " no encontrado"));
 
@@ -46,10 +46,10 @@ public class HabitacionService {
 
         habitacionRepositoryImpl.save(habitacion);
 
-        return ResponseEntity.ok("Habitacion creada con éxito!");
+        return "Habitacion creada con éxito!";
     }
 
-    public ResponseEntity<?> actualizarHabitacion(ActualizarHabitacionDTO actualizarHabitacionDTO) {
+    public String actualizarHabitacion(ActualizarHabitacionDTO actualizarHabitacionDTO) {
         /*
         Recibirá un objeto con la información de la habitación
         (id, numeroHabitacion, tipo, precio, idHotel y disponible)
@@ -72,16 +72,16 @@ public class HabitacionService {
 
         habitacionRepositoryImpl.save(habitacion);
 
-        return ResponseEntity.ok("Habitacion actualizada con éxito!");
+        return"Habitacion actualizada con éxito!";
     }
 
-    public ResponseEntity<?> eliminarHabitacion(int idHabitacion) {
+    public String eliminarHabitacion(int idHabitacion) {
 
         Habitacion habitacion = habitacionRepositoryImpl.findById(idHabitacion)
                 .orElseThrow(() -> new HabitacionNotFoundException("Habitacion con ID " + idHabitacion + " no encontrada"));
 
         habitacionRepositoryImpl.delete(habitacion);
-        return ResponseEntity.ok("Habitacion eliminada con éxito!");
+        return"Habitacion eliminada con éxito!";
     }
 }
 

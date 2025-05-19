@@ -33,14 +33,14 @@ public class HotelService {
     }
  */
 
-    public ResponseEntity<?> crearHotel(CrearHotelDTO crearHotelDTO) {
+    public String crearHotel(CrearHotelDTO crearHotelDTO) {
         hotelRepositoryImpl.save(new Hotel().builder()
                 .nombre(crearHotelDTO.getNombre())
                 .direccion(crearHotelDTO.getDireccion()).build());
-        return ResponseEntity.ok("Hotel creado con exito!");
+        return "Hotel creado con exito!";
     }
 
-    public ResponseEntity<?> actualiazarHotel(ActualizarHotelDTO actualizarHotelDTO) {
+    public String actualiazarHotel(ActualizarHotelDTO actualizarHotelDTO) {
         Hotel hotel = hotelRepositoryImpl.findById(actualizarHotelDTO.getId())
                 .orElseThrow(() -> new HotelNotFoundException("Hotel con ID " + actualizarHotelDTO.getId() + " no encontrado"));
 
@@ -49,29 +49,27 @@ public class HotelService {
 
         hotelRepositoryImpl.save(hotel);
 
-        return ResponseEntity.ok("Hotel actualizado con exito!");
+        return"Hotel actualizado con exito!";
     }
 
-    public ResponseEntity<?> eliminarHotel(int id) {
+    public String eliminarHotel(int id) {
         Hotel hotel = hotelRepositoryImpl.findById(id)
                 .orElseThrow(() -> new HotelNotFoundException("Hotel con ID " + id + " no encontrado"));
         hotelRepositoryImpl.delete(hotel);
-        return ResponseEntity.ok("Hotel eliminado con exito!");
+        return "Hotel eliminado con exito!";
     }
 
-    public ResponseEntity<?> obtenerIdApartirNombre(ObtenerIdApartirNombreDTO obtenerIdApartirNombreDTO) {
+    public String obtenerIdApartirNombre(ObtenerIdApartirNombreDTO obtenerIdApartirNombreDTO) {
         //TODO Preguntar Jose esta bien definir las personalizadas asi ?
-        Hotel hotel = (Hotel) hotelRepositoryImpl.findByNombre(obtenerIdApartirNombreDTO.getNombre())
+        Hotel hotel =  (Hotel)hotelRepositoryImpl.findByNombre(obtenerIdApartirNombreDTO.getNombre())
                 .orElseThrow(()-> new HotelNotFoundException("Hotel con nombre " + obtenerIdApartirNombreDTO.getNombre() + " no encontrado"));
-        hotelRepositoryImpl.delete(hotel);
-
-        return ResponseEntity.ok("El hotel con nombre " + obtenerIdApartirNombreDTO.getNombre() + " tiene un id " + hotel.getId());
+        return  "El id " + hotel.getId() + " corresponder al hotel " + obtenerIdApartirNombreDTO.getNombre();
     }
 
-    public ResponseEntity<?> obtenerNombreAPartirId(int idHotel) {
+    public String obtenerNombreAPartirId(int idHotel) {
         Hotel hotel = hotelRepositoryImpl.findById(idHotel)
                 .orElseThrow(()-> new HotelNotFoundException("Hotel con id " + idHotel + " no encontrado"));
         hotelRepositoryImpl.save(hotel);
-        return ResponseEntity.ok("El hotel con id " + hotel.getId() + " se llama " + hotel.getNombre());
+        return "El hotel con id " + hotel.getId() + " se llama " + hotel.getNombre();
     }
 }

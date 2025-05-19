@@ -19,7 +19,8 @@ public class Reserva {
     @Column(name = "reserva_id")
     private int reservaId;
 
-    //TODO jose, tendriamos que poner el usuario o nos vale con la id ?? 
+    //TODO jose, tendriamos que poner el usuario o nos vale
+    // con el id ??
     @Column(name = "usuario_id", nullable = false)
     private int usuarioId; // Enlace a usuario (solo guardamos id, por ahora)
 

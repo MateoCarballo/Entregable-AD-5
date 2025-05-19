@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 
-public class UserNombreContrasenaDTO {
+public class CambiarEstadoReservaDTO {
     private String nombre;
     private String contrasena;
+    private int reserva_id;
+    private String estadoReserva;
 }

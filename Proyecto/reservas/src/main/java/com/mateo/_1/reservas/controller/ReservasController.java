@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("/reservas")
@@ -61,7 +60,7 @@ public class ReservasController {
      */
     @PostMapping("/habitacion/crear")
     public ResponseEntity<?> crearHabitacion(@RequestBody CrearHabitacionDTO crearHabitacionDTO) {
-        return habitacionServiceImpl.crearHabitacion(crearHabitacionDTO);
+        return ResponseEntity.ok(habitacionServiceImpl.crearHabitacion(crearHabitacionDTO));
     }
 
     /*
@@ -75,12 +74,12 @@ public class ReservasController {
 
     @PatchMapping("/habitacion")
     public ResponseEntity<?> actualizarHabitacion(@RequestBody ActualizarHabitacionDTO actualizarHabitacionDTO) {
-        return habitacionServiceImpl.actualizarHabitacion(actualizarHabitacionDTO);
+        return  ResponseEntity.ok(habitacionServiceImpl.actualizarHabitacion(actualizarHabitacionDTO));
     }
 
     @DeleteMapping("/habitacion/{id}")
     public ResponseEntity<?> eliminarHabitacion(@PathVariable int id) {
-        return habitacionServiceImpl.eliminarHabitacion(id);
+        return ResponseEntity.ok(habitacionServiceImpl.eliminarHabitacion(id));
     }
 
     //HOTELES
@@ -94,7 +93,7 @@ public class ReservasController {
      */
     @PostMapping("/hotel")
     public ResponseEntity<?> crearHotel(@RequestBody CrearHotelDTO crearHotelDTO) {
-        return hotelServiceImpl.crearHotel(crearHotelDTO);
+        return ResponseEntity.ok(hotelServiceImpl.crearHotel(crearHotelDTO));
     }
 
     /*
@@ -107,7 +106,7 @@ public class ReservasController {
      */
     @PatchMapping("/hotel")
     public ResponseEntity<?> actualizarHotel(@RequestBody ActualizarHotelDTO actualizarHotelDTO) {
-        return hotelServiceImpl.actualiazarHotel(actualizarHotelDTO);
+        return ResponseEntity.ok(hotelServiceImpl.actualiazarHotel(actualizarHotelDTO));
     }
 
     /*
@@ -120,7 +119,7 @@ public class ReservasController {
      */
     @DeleteMapping("/hotel/{id}")
     public ResponseEntity<?> eliminarHotel(@PathVariable int id) {
-        return hotelServiceImpl.eliminarHotel(id);
+        return ResponseEntity.ok(hotelServiceImpl.eliminarHotel(id));
     }
 
     /*
@@ -134,7 +133,7 @@ public class ReservasController {
     //TODO preguntar Jose, es necesario crear una dto para esto ??
     @PostMapping ("/hotel/id")
     public ResponseEntity<?> obtenerIdApartirNombre(@RequestBody ObtenerIdApartirNombreDTO obtenerIdApartirNombreDTO){
-        return hotelServiceImpl.obtenerIdApartirNombre(obtenerIdApartirNombreDTO);
+        return ResponseEntity.ok(hotelServiceImpl.obtenerIdApartirNombre(obtenerIdApartirNombreDTO));
     }
 
     /*
@@ -148,7 +147,7 @@ public class ReservasController {
 
     @PostMapping("/hotel/nombre/{id}")
     public ResponseEntity<?> obtenerNombreAPartirId(@PathVariable int id){
-        return hotelServiceImpl.obtenerNombreAPartirId(id);
+        return ResponseEntity.ok(hotelServiceImpl.obtenerNombreAPartirId(id));
     }
 
     //RESERVAS
@@ -164,8 +163,7 @@ public class ReservasController {
     @PostMapping("/reservas")
     public ResponseEntity<?> crearReserva(@RequestBody CrearReservaDTO crearReservaDTO){
         try {
-            reservaServiceImpl.crearReserva(crearReservaDTO);
-            return ResponseEntity.ok("Reserva creada con éxito!");
+            return ResponseEntity.ok(reservaServiceImpl.crearReserva(crearReservaDTO));
         }catch (CredencialesIncorrectosException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }catch (HabitacionNotFoundException e) {
@@ -175,4 +173,18 @@ public class ReservasController {
         }
     }
 
+    /*
+    Cambiar estado de una reserva (cambiarEstado):
+    Se encargará de modificar el estado de una reserva.
+    URL de ejecución: la ruta raíz del microservicio.
+    Mét0do de consulta: PATCH.
+    Recibirá un objeto con la información de la reserva (reserva_id y estado)
+    Devolverá una cadena indicando si la operación se completó correctamente o si hubo algún fallo.
+     */
+    @PatchMapping("/reservas")
+    public ResponseEntity<?> cambiarEstado(CambiarEstadoReservaDTO cambiarEstadoReservaDTO) {
+        return ResponseEntity.ok(reservaServiceImpl.cambiarEstado(cambiarEstadoReservaDTO));
+    }
+
+    }
 }
