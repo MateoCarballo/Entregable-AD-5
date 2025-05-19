@@ -1,10 +1,13 @@
 package com.mateo._1.reservas.controller;
 
 import com.mateo._1.reservas.dto.*;
+import com.mateo._1.reservas.exceptions.CredencialesIncorrectosException;
+import com.mateo._1.reservas.exceptions.HabitacionNotFoundException;
 import com.mateo._1.reservas.service.HabitacionService;
 import com.mateo._1.reservas.service.HotelService;
 import com.mateo._1.reservas.service.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -160,7 +163,16 @@ public class ReservasController {
 
     @PostMapping("/reservas")
     public ResponseEntity<?> crearReserva(@RequestBody CrearReservaDTO crearReservaDTO){
-        return ResponseEntity.ok(reservaServiceImpl.crearReserva(crearReservaDTO);
+        try {
+            reservaServiceImpl.crearReserva(crearReservaDTO);
+            return ResponseEntity.ok("Reserva creada con éxito!");
+        }catch (CredencialesIncorrectosException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }catch (HabitacionNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear la reserva");
+        }
     }
 
 }
