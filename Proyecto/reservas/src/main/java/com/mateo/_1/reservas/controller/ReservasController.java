@@ -17,7 +17,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/reservas")
 public class ReservasController {
-    private final String URL_VALIDAR_CREDENCIALES = "http://localhost:8502/usuarios/credenciales";
+    //Antigua ruta sin tener eureka
+    //private final String URL_VALIDAR_CREDENCIALES = "http://localhost:8502/usuarios/credenciales";
+
+    //Usar eureka para facilitar las url sin tener que decirle la ip ni el puerto
+    @Autowired
+    private RestTemplate restTemplate;
+    private static final String URL_VALIDAR_CREDENCIALES = "http://usuarios/usuarios/validar";
 
     private ReservaService reservaServiceImpl;
     private HotelService hotelServiceImpl;
@@ -282,6 +288,14 @@ public class ReservasController {
                 .build();
         return validarEnMicroServicioUsuarios(comprobarCredencialesDTO);
     }
+    private boolean validarEnMicroServicioUsuarios(UserNombreContrasenaDTO userNombreContrasenaDTO){
+        ResponseEntity<Boolean> response = restTemplate.postForEntity(
+                URL_VALIDAR_CREDENCIALES, userNombreContrasenaDTO, Boolean.class
+        );
+        return Boolean.TRUE.equals(response.getBody());
+    }
+
+   /* VALIDAR LOS CREDENCIALES SIN EUREKA
 
     private boolean validarEnMicroServicioUsuarios(UserNombreContrasenaDTO userNombreContrasenaDTO){
         //0 INICIALIZAR template para preguntar al microservicio de usuarios
@@ -296,5 +310,6 @@ public class ReservasController {
         //Devolver si es o no valido
         return Boolean.TRUE.equals(response.getBody());
     }
+    */
 }
 
