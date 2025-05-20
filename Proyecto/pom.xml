@@ -23,6 +23,7 @@
         <module>usuarios</module>
         <module>reservas</module>
         <module>eureka-server</module>
+        <module>api-gateway</module>
     </modules>
 
     <properties>
