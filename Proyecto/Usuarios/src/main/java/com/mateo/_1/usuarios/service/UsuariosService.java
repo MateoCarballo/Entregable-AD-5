@@ -1,8 +1,9 @@
 package com.mateo._1.usuarios.service;
 
-import com.mateo._1.usuarios.entity.UserCompleteDTO;
-import com.mateo._1.usuarios.entity.UserNombreContrasenaDTO;
-import com.mateo._1.usuarios.entity.UserNombreIdDTO;
+import com.mateo._1.usuarios.dto.RegistroUsuarioDTO;
+import com.mateo._1.usuarios.dto.UserCompleteDTO;
+import com.mateo._1.usuarios.dto.UserNombreContrasenaDTO;
+import com.mateo._1.usuarios.dto.UserNombreIdDTO;
 import com.mateo._1.usuarios.entity.Usuario;
 import com.mateo._1.usuarios.repository.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,20 +25,26 @@ public class UsuariosService {
         this.usuariosRepositoryImpl = usuariosRepositoryImpl;
     }
 
-    public String registrarUsuario(Usuario u) {
-        Usuario usuarioGuardado = usuariosRepositoryImpl.save(u);
-        return "Nuevo usuario guardado con id " + usuarioGuardado.getId();
+    public String registrarUsuario(RegistroUsuarioDTO registroUsuarioDTO) {
+        Usuario usuario = Usuario.builder()
+                .nombre(registroUsuarioDTO.getNombre())
+                .correo_electronico(registroUsuarioDTO.getCorreo_electronico())
+                .direccion(registroUsuarioDTO.getDireccion())
+                .contrasena(registroUsuarioDTO.getContrasena())
+                .build();
+        usuariosRepositoryImpl.save(usuario);
+        return "Nuevo usuario guardado con id " + usuario.getId();
     }
 
     public String actualizarUsuario(UserCompleteDTO userCompleteDTO) {
         String cadenaResultado = "No existe el usuario que se desea modificar";
-        Usuario usuario = usuariosRepositoryImpl.findById(userCompleteDTO.getU_id()).orElse(null);
+        Usuario usuario = usuariosRepositoryImpl.findById(userCompleteDTO.getId()).orElse(null);
         if (usuario != null) {
             //Cargamos los nuevos valoresd desde el DTO para modificar el usuario y lo guardamos nuevamente
-            usuario.setNombre(userCompleteDTO.getU_nombre());
-            usuario.setCorreo_electronico(userCompleteDTO.getU_correo_electronico());
-            usuario.setDireccion(userCompleteDTO.getU_direccion());
-            usuario.setContrasena(userCompleteDTO.getU_contrasena());
+            usuario.setNombre(userCompleteDTO.getNombre());
+            usuario.setCorreo_electronico(userCompleteDTO.getCorreo_electronico());
+            usuario.setDireccion(userCompleteDTO.getDireccion());
+            usuario.setContrasena(userCompleteDTO.getContrasena());
 
             //Guardar el usuario directamente ya modificado
             usuariosRepositoryImpl.save(usuario);
@@ -49,8 +56,8 @@ public class UsuariosService {
     public String eliminarUsuario(UserNombreContrasenaDTO userNombreContrasenaDto) {
         String response = "No se ha encontrado ningun usuario con este nombre y constrasena";
         Usuario usuario = usuariosRepositoryImpl.findByNombreAndContrasena(
-                userNombreContrasenaDto.getNombreUsuario(),
-                userNombreContrasenaDto.getContrasenaUsuario()
+                userNombreContrasenaDto.getNombre(),
+                userNombreContrasenaDto.getContrasena()
         ).orElse(null);
 
         if (usuario != null) {
@@ -64,8 +71,12 @@ public class UsuariosService {
         return usuariosRepositoryImpl.findById(id).orElse(null);
     }
 
-    public Usuario obtenerUsuarioPorNombre(String nombre) {
-        return usuariosRepositoryImpl.findByNombre(nombre).orElse(null);
+    public String obtenerUsuarioPorNombre(String nombre) {
+        Usuario u = usuariosRepositoryImpl.findByNombre(nombre).orElse(null);
+        if (u== null){
+            return "No existe ningun usuario registrado con este nombre " + nombre;
+        }
+        return String.valueOf(u.getId());
     }
 
     public Usuario validarNombreConstrasena(String nombre, String clave) {
@@ -78,13 +89,13 @@ public class UsuariosService {
 
     public boolean validarCredenciales(UserNombreContrasenaDTO userNombreContrasenaDto) {
         return usuariosRepositoryImpl
-                .findByNombreAndContrasena(userNombreContrasenaDto.getNombreUsuario(), userNombreContrasenaDto.getContrasenaUsuario())
+                .findByNombreAndContrasena(userNombreContrasenaDto.getNombre(), userNombreContrasenaDto.getContrasena())
                 .isPresent();
     }
 
     public UserNombreIdDTO obtenerUserId(UserNombreContrasenaDTO userNombreContrasenaDTO) {
-        Usuario usuario = usuariosRepositoryImpl.findByNombre(userNombreContrasenaDTO.getNombreUsuario()).orElse(null);
-        if(usuario == null) return null;
+        Usuario usuario = usuariosRepositoryImpl.findByNombre(userNombreContrasenaDTO.getNombre()).orElse(null);
+        if (usuario == null) return null;
         UserNombreIdDTO userToRepond = UserNombreIdDTO.builder()
                 .id(usuario.getId())
                 .nombre(usuario.getNombre())

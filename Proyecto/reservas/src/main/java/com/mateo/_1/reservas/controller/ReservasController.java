@@ -220,7 +220,7 @@ public class ReservasController {
 
     @GetMapping("/reserva")
     public ResponseEntity<?> listarReservasUsuario(@RequestBody UserNombreContrasenaDTO userNombreContrasenaDTO){
-        if (!validarCredenciales(userNombreContrasenaDTO.getNombreUsuario(), userNombreContrasenaDTO.getContrasenaUsuario())){
+        if (!validarCredenciales(userNombreContrasenaDTO.getNombre(), userNombreContrasenaDTO.getContrasena())){
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .body("Los credenciales no son correctos.");
@@ -283,8 +283,8 @@ public class ReservasController {
 
     private boolean validarCredenciales(String nombre, String  contrasena){
         UserNombreContrasenaDTO comprobarCredencialesDTO = UserNombreContrasenaDTO.builder()
-                .nombreUsuario(nombre)
-                .contrasenaUsuario(contrasena)
+                .nombre(nombre)
+                .contrasena(contrasena)
                 .build();
         return validarEnMicroServicioUsuarios(comprobarCredencialesDTO);
     }

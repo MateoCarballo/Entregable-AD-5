@@ -1,8 +1,9 @@
 package com.mateo._1.usuarios.controller;
 
-import com.mateo._1.usuarios.entity.UserCompleteDTO;
-import com.mateo._1.usuarios.entity.UserNombreContrasenaDTO;
-import com.mateo._1.usuarios.entity.UserNombreIdDTO;
+import com.mateo._1.usuarios.dto.RegistroUsuarioDTO;
+import com.mateo._1.usuarios.dto.UserCompleteDTO;
+import com.mateo._1.usuarios.dto.UserNombreContrasenaDTO;
+import com.mateo._1.usuarios.dto.UserNombreIdDTO;
 import com.mateo._1.usuarios.entity.Usuario;
 import com.mateo._1.usuarios.service.UsuariosService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,9 +52,11 @@ public class UsuariosController {
         return usuariosServiceImpl.obtenerUserId(userNombreContrasenaDTO);
     }
 
+    //TODO revisar aqui porque deberiamos usar una dto
+
     @PostMapping("/registrar")
-    public ResponseEntity<?> registrarUsusario(@RequestBody Usuario usuario) {
-        String cadenaRespuesta = usuariosServiceImpl.registrarUsuario(usuario);
+    public ResponseEntity<?> registrarUsusario(@RequestBody RegistroUsuarioDTO registroUsuarioDTO) {
+        String cadenaRespuesta = usuariosServiceImpl.registrarUsuario(registroUsuarioDTO);
         return ResponseEntity.ok(cadenaRespuesta);
     }
 
@@ -70,7 +73,7 @@ public class UsuariosController {
     @PostMapping("/validar")
     public ResponseEntity<Boolean> validarUsuario(@RequestBody UserNombreContrasenaDTO userNombreContrasenaDto) {
         boolean responseOk = false;
-        Usuario queryResult = usuariosServiceImpl.validarNombreConstrasena(userNombreContrasenaDto.getNombreUsuario(), userNombreContrasenaDto.getContrasenaUsuario());
+        Usuario queryResult = usuariosServiceImpl.validarNombreConstrasena(userNombreContrasenaDto.getNombre(), userNombreContrasenaDto.getContrasena());
         if (queryResult != null) {
             responseOk = true;
         }
@@ -88,7 +91,7 @@ public class UsuariosController {
     }
 
     @GetMapping("/info/nombre/{nombre}")
-    public ResponseEntity<Usuario> obtenerInfoUsuarioPorNombre(@PathVariable("nombre") String user_name) { //TODO revisar aqui si funciona llamandole difernete a cada cosa id -> UserId
+    public ResponseEntity<?> obtenerInfoUsuarioPorNombre(@PathVariable("nombre") String user_name) { //TODO revisar aqui si funciona llamandole difernete a cada cosa id -> UserId
         return ResponseEntity.ok(usuariosServiceImpl.obtenerUsuarioPorNombre(user_name));
     }
 

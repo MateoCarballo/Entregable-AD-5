@@ -1,4 +1,4 @@
-package com.mateo._1.reservas.dto;
+package com.mateo._1.usuarios.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 
-public class UserNombreContrasenaDTO {
+public class UserNombreIdDTO {
+    private int id;
     private String nombre;
-    private String contrasena;
 }

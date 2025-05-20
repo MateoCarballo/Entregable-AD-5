@@ -50,8 +50,8 @@ public class ReservaService {
         }
         //3.5- Creamos una dto para poder consultar en el microservicio de usuarios que id tiene asociado este user
         UserNombreContrasenaDTO userNombreContrasenaDTO = UserNombreContrasenaDTO.builder()
-                .nombreUsuario(crearReservaDTO.getNombreUsuario())
-                .contrasenaUsuario(crearReservaDTO.getContrasenaUsuario())
+                .nombre(crearReservaDTO.getNombreUsuario())
+                .contrasena(crearReservaDTO.getContrasenaUsuario())
                 .build();
 
         //4- Obtener desde el microservicio de usuarios el id asociado al nombre de usuario que llega
