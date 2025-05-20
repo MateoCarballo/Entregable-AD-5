@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class CrearHotelDTO {
-    private String nombreUsuario;
-    private String contrasenaUsuario;
+    private String usuario;
+    private String contrasena;
     private String nombre;
     private String direccion;
 }

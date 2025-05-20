@@ -1,14 +1,11 @@
 package com.mateo._1.reservas.service;
 
 import com.mateo._1.reservas.dto.ActualizarHotelDTO;
-import com.mateo._1.reservas.dto.CheckReservaDTO;
 import com.mateo._1.reservas.dto.CrearHotelDTO;
-import com.mateo._1.reservas.dto.ObtenerIdApartirNombreDTO;
 import com.mateo._1.reservas.entity.Hotel;
 import com.mateo._1.reservas.exceptions.HotelNotFoundException;
 import com.mateo._1.reservas.repository.HotelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,9 +32,11 @@ public class HotelService {
  */
 
     public String crearHotel(CrearHotelDTO crearHotelDTO) {
-        hotelRepositoryImpl.save(new Hotel().builder()
+        Hotel hotel = Hotel.builder()
                 .nombre(crearHotelDTO.getNombre())
-                .direccion(crearHotelDTO.getDireccion()).build());
+                .direccion(crearHotelDTO.getDireccion())
+                .build();
+        hotelRepositoryImpl.save(hotel);
         return "Hotel creado con exito!";
     }
 
@@ -60,17 +59,16 @@ public class HotelService {
         return "Hotel eliminado con exito!";
     }
 
-    public String obtenerIdApartirNombre(ObtenerIdApartirNombreDTO obtenerIdApartirNombreDTO) {
+    public String obtenerIdApartirNombre(String  nombre) {
         //TODO Preguntar Jose esta bien definir las personalizadas asi ?
-        Hotel hotel =  (Hotel)hotelRepositoryImpl.findByNombre(obtenerIdApartirNombreDTO.getNombre())
-                .orElseThrow(()-> new HotelNotFoundException("Hotel con nombre " + obtenerIdApartirNombreDTO.getNombre() + " no encontrado"));
-        return  "El id " + hotel.getId() + " corresponder al hotel " + obtenerIdApartirNombreDTO.getNombre();
+        Hotel hotel =  (Hotel)hotelRepositoryImpl.findByNombre(nombre)
+                .orElseThrow(()-> new HotelNotFoundException("Hotel con nombre " + nombre + " no encontrado"));
+        return  "El id " + hotel.getId() + " corresponder al hotel " +nombre;
     }
 
     public String obtenerNombreAPartirId(int idHotel) {
         Hotel hotel = hotelRepositoryImpl.findById(idHotel)
                 .orElseThrow(()-> new HotelNotFoundException("Hotel con id " + idHotel + " no encontrado"));
-        hotelRepositoryImpl.save(hotel);
-        return "El hotel con id " + hotel.getId() + " se llama " + hotel.getNombre();
+        return "El hotel con id " + idHotel + " se llama " + hotel.getNombre();
     }
 }

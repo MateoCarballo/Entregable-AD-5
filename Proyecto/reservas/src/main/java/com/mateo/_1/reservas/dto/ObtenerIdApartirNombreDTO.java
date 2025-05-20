@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class ObtenerIdApartirNombreDTO {
     private String nombreUsuario;
     private String contrasenaUsuario;
-    private String nombre;
 }

@@ -52,22 +52,14 @@ public class HabitacionService {
     }
 
     public String actualizarHabitacion(ActualizarHabitacionDTO actualizarHabitacionDTO) {
-        /*
-        Recibirá un objeto con la información de la habitación
-        (id, numeroHabitacion, tipo, precio, idHotel y disponible)
-         */
-
-        //TODO jose preguntar. Que deberia hacer llamar entre services llamar directamente entre repositorios ??
         Hotel hotel = hotelRepositoryImpl.findById(actualizarHabitacionDTO.getIdHotel())
                 .orElseThrow(() -> new HotelNotFoundException("Hotel con ID " + actualizarHabitacionDTO.getIdHotel() + " no encontrado"));
-
 
         Habitacion habitacion = habitacionRepositoryImpl.findById(actualizarHabitacionDTO.getId())
                 .orElseThrow(() -> new HabitacionNotFoundException("Habitacion con ID " + actualizarHabitacionDTO.getId() + " no encontrada"));
 
-        //TODO preguntar Jose Como puedo hacer que lance una excepcion si no mandamos un valor valido para el tipo de habitacion, que es un enum de Strings ?
         habitacion.setNumeroHabitacion(actualizarHabitacionDTO.getNumeroHabitacion());
-        habitacion.setTipo(actualizarHabitacionDTO.getTipo().toString());
+        habitacion.setTipo(actualizarHabitacionDTO.getTipo());
         habitacion.setPrecio(actualizarHabitacionDTO.getPrecio());
         habitacion.setHotel(hotel);
         habitacion.setDisponible(actualizarHabitacionDTO.isDisponible());

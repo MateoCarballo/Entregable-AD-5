@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
-import java.util.List;
 
 @RestController
 @RequestMapping("/reservas")
 public class ReservasController {
+
     //Antigua ruta sin tener eureka
     //private final String URL_VALIDAR_CREDENCIALES = "http://localhost:8502/usuarios/credenciales";
 
@@ -71,7 +71,7 @@ public class ReservasController {
      */
     @PostMapping("/habitacion/crear")
     public ResponseEntity<?> crearHabitacion(@RequestBody CrearHabitacionDTO crearHabitacionDTO) {
-        if (!validarCredenciales(crearHabitacionDTO.getNombreUsuario(), crearHabitacionDTO.getContrasenaUsuario())) return ResponseEntity
+        if (!validarCredenciales(crearHabitacionDTO.getUsuario(), crearHabitacionDTO.getContrasena())) return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body("Los credenciales no son correctos.");
         return ResponseEntity.ok(habitacionServiceImpl.crearHabitacion(crearHabitacionDTO));
@@ -81,14 +81,14 @@ public class ReservasController {
     Actualizar información de una habitación (actualizarHabitacion):
     Se encargará de actualizar los datos de una habitación en un hotel.
     URL de ejecución: la ruta raíz del gestor de habitaciones.
-    Método de consulta: PATCH.
+    Mét0do de consulta: PATCH.
     Recibirá un objeto con la información de la habitación (id, numeroHabitacion, tipo, precio, idHotel y disponible)
     Devolverá una cadena indicando si la operación se completó correctamente o si hubo algún fallo.
      */
 
     @PatchMapping("/habitacion")
     public ResponseEntity<?> actualizarHabitacion(@RequestBody ActualizarHabitacionDTO actualizarHabitacionDTO) {
-        if (!validarCredenciales(actualizarHabitacionDTO.getNombreUsuario(), actualizarHabitacionDTO.getContrasenaUsuario())) return ResponseEntity
+        if (!validarCredenciales(actualizarHabitacionDTO.getUsuario(), actualizarHabitacionDTO.getContrasena())) return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body("Los credenciales no son correctos.");;
         return ResponseEntity.ok(habitacionServiceImpl.actualizarHabitacion(actualizarHabitacionDTO));
@@ -110,7 +110,7 @@ public class ReservasController {
      */
     @PostMapping("/hotel")
     public ResponseEntity<?> crearHotel(@RequestBody CrearHotelDTO crearHotelDTO) {
-        if (!validarCredenciales(crearHotelDTO.getNombreUsuario(), crearHotelDTO.getContrasenaUsuario())) return ResponseEntity
+        if (!validarCredenciales(crearHotelDTO.getUsuario(), crearHotelDTO.getContrasena())) return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body("Los credenciales no son correctos.");
         return ResponseEntity.ok(hotelServiceImpl.crearHotel(crearHotelDTO));
@@ -126,7 +126,7 @@ public class ReservasController {
      */
     @PatchMapping("/hotel")
     public ResponseEntity<?> actualizarHotel(@RequestBody ActualizarHotelDTO actualizarHotelDTO) {
-        if (!validarCredenciales(actualizarHotelDTO.getNombreUsuario(), actualizarHotelDTO.getContrasenaUsuario())) return ResponseEntity
+        if (!validarCredenciales(actualizarHotelDTO.getUsuario(), actualizarHotelDTO.getContrasena())) return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body("Los credenciales no son correctos.");
         return ResponseEntity.ok(hotelServiceImpl.actualiazarHotel(actualizarHotelDTO));
@@ -153,13 +153,12 @@ public class ReservasController {
     Recibirá a través de la URL el nombre del hotel.
     Devolverá una cadena indicando el ID del hotel en cuestión.
      */
-    //TODO preguntar Jose, es necesario crear una dto para esto ??
-    @PostMapping("/hotel/id")
-    public ResponseEntity<?> obtenerIdApartirNombre(@RequestBody ObtenerIdApartirNombreDTO obtenerIdApartirNombreDTO) {
-        if (!validarCredenciales(obtenerIdApartirNombreDTO.getNombreUsuario(), obtenerIdApartirNombreDTO.getContrasenaUsuario())) return ResponseEntity
+    @PostMapping("/hotel/id/{nombre}")
+    public ResponseEntity<?> obtenerIdApartirNombre(@PathVariable String nombre, @RequestBody UserNombreContrasenaDTO userNombreContrasenaDTO) {
+        if (!validarCredenciales(userNombreContrasenaDTO.getNombre(), userNombreContrasenaDTO.getContrasena())) return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body("Los credenciales no son correctos.");
-        return ResponseEntity.ok(hotelServiceImpl.obtenerIdApartirNombre(obtenerIdApartirNombreDTO));
+        return ResponseEntity.ok(hotelServiceImpl.obtenerIdApartirNombre(nombre));
     }
 
     /*
@@ -172,7 +171,10 @@ public class ReservasController {
      */
 
     @PostMapping("/hotel/nombre/{id}")
-    public ResponseEntity<?> obtenerNombreAPartirId(@PathVariable int id) {
+    public ResponseEntity<?> obtenerNombreAPartirId(@PathVariable int id, @RequestBody UserNombreContrasenaDTO userNombreContrasenaDTO) {
+        if (!validarCredenciales(userNombreContrasenaDTO.getNombre(), userNombreContrasenaDTO.getContrasena())) return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("Los credenciales no son correctos.");
         return ResponseEntity.ok(hotelServiceImpl.obtenerNombreAPartirId(id));
     }
 

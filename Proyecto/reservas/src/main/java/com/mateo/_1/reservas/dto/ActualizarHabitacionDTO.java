@@ -12,11 +12,11 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ActualizarHabitacionDTO {
-    private String nombreUsuario;
-    private String contrasenaUsuario;
+    private String usuario;
+    private String contrasena;
     private int id;
     private int numeroHabitacion;
-    private TipoHabitacion tipo;
+    private String tipo;
     private BigDecimal precio;
     private int idHotel;
     private boolean disponible;
