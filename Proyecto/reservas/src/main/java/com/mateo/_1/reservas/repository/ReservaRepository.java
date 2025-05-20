@@ -13,7 +13,5 @@ public interface ReservaRepository extends JpaRepository<Reserva,Integer> {
 
     List<Reserva> findAllByEstado(String estado);
 
-    Reserva findByReservaIdAndUsuarioIdAndHabitacion_habitacionId(int idReserva, int idUsuario, int idHabitacion);
-
     boolean existsByReservaIdAndUsuarioIdAndHabitacion_Hotel_Id(int idReserva, int idUsuario, int idHotel);
 }

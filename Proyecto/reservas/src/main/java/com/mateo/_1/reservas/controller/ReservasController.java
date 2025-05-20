@@ -211,13 +211,15 @@ public class ReservasController {
     Solo recibirá la información de usuario y contraseña.
     Devolverá una lista con la información de las reservas (fecha_inicio, fecha_fin y habitacion_id).
      */
-    //TODO sin hacer
+
     @GetMapping("/reserva")
-    public ResponseEntity<?> listarReservasUsuario(ListarReservasDTO listarReservasDto){
-        if (!validarCredenciales(listarReservasDto.getNombreUsuario(), listarReservasDto.getContrasenaUsuario())) return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body("Los credenciales no son correctos.");
-        return ResponseEntity.ok(reservaServiceImpl.listarReservasPorUsuario(listarReservasDto));
+    public ResponseEntity<?> listarReservasUsuario(@RequestBody UserNombreContrasenaDTO userNombreContrasenaDTO){
+        if (!validarCredenciales(userNombreContrasenaDTO.getNombreUsuario(), userNombreContrasenaDTO.getContrasenaUsuario())){
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Los credenciales no son correctos.");
+        }
+        return ResponseEntity.ok(reservaServiceImpl.listarReservasPorUsuario(userNombreContrasenaDTO));
     }
 
     /*

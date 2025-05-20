@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,11 +27,11 @@ public class ReservaService {
         this.habitacionRepositoryImpl = habitacionRepositoryImpl;
     }
 
-    public List<Reserva> devolverTodos(){
+    public List<Reserva> devolverTodos() {
         return reservaRepositoryImpl.findAll();
     }
 
-    private int obtenerIdUsuario(UserNombreContrasenaDTO UserNombreContrasenaDTO){
+    private int obtenerIdUsuario(UserNombreContrasenaDTO UserNombreContrasenaDTO) {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<UserNombreIdDTO> response = restTemplate.postForEntity(URL_OBTENER_ID, UserNombreContrasenaDTO, UserNombreIdDTO.class);
         return response.getBody().getId();
@@ -44,7 +45,7 @@ public class ReservaService {
             return "La habitacion con id " + crearReservaDTO.getHabitacionId() + " no existe en la DB, revisa los datos";
         }
         //3- Comprobar que las fechas estan bien escritas (no tener fecha fin antes que fecha inicio)
-        if (!crearReservaDTO.comprobarFechas()){ //Devuelve true si las fechas son coherentes
+        if (!crearReservaDTO.comprobarFechas()) { //Devuelve true si las fechas son coherentes
             return "Las fecha fin es previa a la fecha de inicio";
         }
         //3.5- Creamos una dto para poder consultar en el microservicio de usuarios que id tiene asociado este user
@@ -64,7 +65,7 @@ public class ReservaService {
         //5- Guardar la nueva reserva
         reservaRepositoryImpl.save(reserva);
 
-       return "Reserva creada con éxito!";
+        return "Reserva creada con éxito!";
     }
 
     public String cambiarEstado(CambiarEstadoReservaDTO cambiarEstadoReservaDTO) {
@@ -72,26 +73,31 @@ public class ReservaService {
         //2- Comprobar que la habitacion existe
         Reserva reserva = reservaRepositoryImpl.findById(cambiarEstadoReservaDTO.getReserva_id()).orElse(null);
         if (reserva == null) {
-            return "La reserva con id " +cambiarEstadoReservaDTO.getReserva_id() + " no existe en la DB, revisa los datos";
+            return "La reserva con id " + cambiarEstadoReservaDTO.getReserva_id() + " no existe en la DB, revisa los datos";
         }
         //4- Obtener desde el microservicio de usuarios el id asociado al nombre de usuario que llega
         String[] posiblesEstados = {"Pendiente", "Confirmada", "Cancelada"};
         String estadoAnterior = reserva.getEstado();
-       if (!Arrays.asList(posiblesEstados).contains(cambiarEstadoReservaDTO.getEstadoReserva())) return "El nuevo estado no es valido";
+        if (!Arrays.asList(posiblesEstados).contains(cambiarEstadoReservaDTO.getEstadoReserva()))
+            return "El nuevo estado no es valido";
         reserva.setEstado(cambiarEstadoReservaDTO.getEstadoReserva());
         //5- Guardar la nueva reserva
         reservaRepositoryImpl.save(reserva);
         return "El estado de la reserva ha cambiado de " + estadoAnterior + " a " + reserva.getEstado();
     }
 
-    public List<Reserva> listarReservasPorUsuario(ListarReservasDTO listarReservasDto) {
-        UserNombreContrasenaDTO userNombreContrasenaDTO = UserNombreContrasenaDTO.builder()
-                .nombreUsuario(listarReservasDto.getNombreUsuario())
-                .contrasenaUsuario(listarReservasDto.getContrasenaUsuario())
-                .build();
-
+    public List<ListarReservasDTO> listarReservasPorUsuario(UserNombreContrasenaDTO userNombreContrasenaDTO) {
         int idUsuario = obtenerIdUsuario(userNombreContrasenaDTO);
-        return reservaRepositoryImpl.findAllByUsuarioId(idUsuario);
+        List<Reserva> reservas = reservaRepositoryImpl.findAllByUsuarioId(idUsuario);
+        List<ListarReservasDTO> listadoReservasDTO = new ArrayList<>();
+        for (Reserva r : reservas) {
+            listadoReservasDTO.add(ListarReservasDTO.builder()
+                    .habitacionId(r.getHabitacion().getHabitacionId())
+                    .fechaInicio(r.getFechaInicio())
+                    .fechaFin(r.getFechaFin())
+                    .build());
+        }
+        return listadoReservasDTO;
     }
 
     public List<Reserva> listarReservasPorEstado(String estado) {

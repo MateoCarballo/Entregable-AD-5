@@ -15,6 +15,16 @@ public class ListarReservasDTO {
     private int habitacionId;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
-    private String nombreUsuario;
-    private String contrasenaUsuario;
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("===== Reserva =====\n");
+        sb.append("Habitación ID : ").append(habitacionId).append("\n");
+        sb.append("Fecha Inicio  : ").append(fechaInicio).append("\n");
+        sb.append("Fecha Fin     : ").append(fechaFin).append("\n");
+        sb.append("===================\n");
+        return sb.toString();
+    }
+
 }

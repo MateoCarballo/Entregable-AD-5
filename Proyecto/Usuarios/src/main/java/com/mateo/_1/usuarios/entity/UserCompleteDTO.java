@@ -4,7 +4,7 @@ import lombok.*;
 
 @Data
 @AllArgsConstructor
-@
+@NoArgsConstructor
 public class UserCompleteDTO {
     private int u_id;
     private String u_nombre;
