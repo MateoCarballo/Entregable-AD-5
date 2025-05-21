@@ -1,0 +1,337 @@
+# Documentación de Endpoints para Postman - Servicio de Reservas
+
+## URL Base
+http://localhost:9000/reservas
+
+## Configuración General
+- Content-Type: application/json
+- Método de autenticación: Credenciales en el body de cada petición
+
+## 1. Endpoints de Prueba
+
+### Test de Conexión
+- URL: http://localhost:9000/reservas/test
+- Método: GET
+- Respuesta: "Todo ok"
+
+### Listar Todas las Habitaciones
+- URL: http://localhost:9000/reservas/habitacion/All
+- Método: GET
+
+### Listar Todos los Hoteles
+- URL: http://localhost:9000/reservas/hotel/All
+- Método: GET
+
+### Listar Todas las Reservas
+- URL: http://localhost:9000/reservas/reserva/All
+- Método: GET
+
+## 2. Endpoints de Habitaciones
+
+### Crear Habitación
+- URL: http://localhost:9000/reservas/habitacion/crear
+- Método: POST
+- Body:
+```json
+{
+    "usuario": "admin",
+    "contrasena": "admin123",
+    "numeroHabitacion": 101,
+    "tipo": "Individual",
+    "precio": 75.00,
+    "idHotel": 1
+}
+```
+
+### Actualizar Habitación
+- URL: http://localhost:9000/reservas/habitacion
+- Método: PATCH
+- Body:
+```json
+{
+    "usuario": "admin",
+    "contrasena": "admin123",
+    "id": 1,
+    "numeroHabitacion": 101,
+    "tipo": "Doble",
+    "precio": 120.00,
+    "idHotel": 1,
+    "disponible": true
+}
+```
+
+### Eliminar Habitación
+- URL: http://localhost:9000/reservas/habitacion/{id}
+- Método: DELETE
+- Parámetros: Reemplazar {id} con el ID de la habitación
+
+## 3. Endpoints de Hoteles
+
+### Crear Hotel
+- URL: http://localhost:9000/reservas/hotel
+- Método: POST
+- Body:
+```json
+{
+    "usuario": "admin",
+    "contrasena": "admin123",
+    "nombre": "Hotel Ejemplo",
+    "direccion": "Calle Principal 123"
+}
+```
+
+### Actualizar Hotel
+- URL: http://localhost:9000/reservas/hotel
+- Método: PATCH
+- Body:
+```json
+{
+    "id": 1,
+    "nombre": "Hotel Ejemplo Actualizado",
+    "usuario": "admin",
+    "contrasena": "admin123",
+    "direccion": "Nueva Dirección 456"
+}
+```
+
+### Eliminar Hotel
+- URL: http://localhost:9000/reservas/hotel/{id}
+- Método: DELETE
+- Parámetros: Reemplazar {id} con el ID del hotel
+
+### Obtener ID de Hotel por Nombre
+- URL: http://localhost:9000/reservas/hotel/id/{nombre}
+- Método: POST
+- Body:
+```json
+{
+    "nombre": "admin",
+    "contrasena": "admin123"
+}
+```
+
+### Obtener Nombre de Hotel por ID
+- URL: http://localhost:9000/reservas/hotel/nombre/{id}
+- Método: POST
+- Body:
+```json
+{
+    "nombre": "admin",
+    "contrasena": "admin123"
+}
+```
+
+## 4. Endpoints de Reservas
+
+### Crear Reserva
+- URL: http://localhost:9000/reservas/reserva
+- Método: POST
+- Body:
+```json
+{
+    "habitacion_id": 1,
+    "fecha_inicio": "2024-03-20",
+    "fecha_fin": "2024-03-25",
+    "usuario": "admin",
+    "contrasena": "admin123"
+}
+```
+
+### Cambiar Estado de Reserva
+- URL: http://localhost:9000/reservas/reserva
+- Método: PATCH
+- Body:
+```json
+{
+    "usuario": "admin",
+    "contrasena": "admin123",
+    "reserva_id": 1,
+    "estado": "Confirmada"
+}
+```
+Nota: Estados válidos: "Pendiente", "Confirmada", "Cancelada"
+
+### Listar Reservas de Usuario
+- URL: http://localhost:9000/reservas/reserva
+- Método: GET
+- Body:
+```json
+{
+    "nombre": "admin",
+    "contrasena": "admin123"
+}
+```
+
+### Listar Reservas por Estado
+- URL: http://localhost:9000/reservas/reserva/{estado}
+- Método: GET
+- Parámetros: Reemplazar {estado} con uno de: Pendiente, Confirmada, Cancelada
+
+### Verificar Reserva
+- URL: http://localhost:9000/reservas/check/{idUsuario}-{idHotel}-{idReserva}
+- Método: GET
+- Parámetros: Reemplazar {idUsuario}, {idHotel} y {idReserva} con los IDs correspondientes
+
+## Notas Importantes
+
+1. Orden de inicio de servicios:
+   - Eureka Server (puerto 8500)
+   - API Gateway (puerto 9000)
+   - Servicio de Usuarios (puerto 8502)
+   - Servicio de Reservas (puerto 8501)
+
+2. Verificación de servicios:
+   - Panel de Eureka: http://localhost:8500
+
+3. Formatos:
+   - Fechas: YYYY-MM-DD
+   - Precios: Números decimales (usar punto como separador)
+   - IDs: Números enteros
+   - Estados de reserva: "Pendiente", "Confirmada", "Cancelada"
+
+4. Autenticación:
+   - Todos los endpoints (excepto /check) requieren usuario y contraseña
+   - Las credenciales se envían en el body de cada petición
+
+5. Códigos de respuesta comunes:
+   - 200: Operación exitosa
+   - 401: Credenciales incorrectas
+   - 404: Recurso no encontrado
+   - 400: Error en la petición
+
+# Documentación de Endpoints para Postman - Servicio de Usuarios
+
+## URL Base
+http://localhost:9000/usuarios
+
+## Configuración General
+- Content-Type: application/json
+
+## 1. Endpoints de Prueba
+
+### Test de Conexión
+- URL: http://localhost:9000/usuarios/test
+- Método: GET
+- Respuesta: "La aplicación está funcionando correctamente"
+
+### Listar Todos los Usuarios
+- URL: http://localhost:9000/usuarios/todos
+- Método: GET
+
+## 2. Endpoints de Gestión de Usuarios
+
+### Registrar Usuario
+- URL: http://localhost:9000/usuarios/registrar
+- Método: POST
+- Body:
+```json
+{
+    "nombre": "Juan Pérez",
+    "correo_electronico": "juan@example.com",
+    "direccion": "Calle Principal 123",
+    "contrasena": "clave123"
+}
+```
+
+### Actualizar Usuario
+- URL: http://localhost:9000/usuarios/registrar
+- Método: PUT
+- Body:
+```json
+{
+    "id": 1,
+    "nombre": "Juan Pérez",
+    "correo_electronico": "juan@example.com",
+    "direccion": "Nueva Dirección 456",
+    "contrasena": "nuevaclave123"
+}
+```
+
+### Eliminar Usuario
+- URL: http://localhost:9000/usuarios
+- Método: DELETE
+- Body:
+```json
+{
+    "nombre": "Juan Pérez",
+    "contrasena": "clave123"
+}
+```
+
+## 3. Endpoints de Validación y Consulta
+
+### Validar Credenciales
+- URL: http://localhost:9000/usuarios/validar
+- Método: POST
+- Body:
+```json
+{
+    "nombre": "Juan Pérez",
+    "contrasena": "clave123"
+}
+```
+- Respuesta: Boolean (true/false)
+
+### Validar Credenciales (Alternativo)
+- URL: http://localhost:9000/usuarios/credenciales
+- Método: POST
+- Body:
+```json
+{
+    "nombre": "Juan Pérez",
+    "contrasena": "clave123"
+}
+```
+- Respuesta: Boolean (true/false)
+
+### Obtener ID de Usuario
+- URL: http://localhost:9000/usuarios/obtenerId
+- Método: POST
+- Body:
+```json
+{
+    "nombre": "Juan Pérez",
+    "contrasena": "clave123"
+}
+```
+- Respuesta:
+```json
+{
+    "id": 1,
+    "nombre": "Juan Pérez"
+}
+```
+
+### Obtener Info Usuario por ID
+- URL: http://localhost:9000/usuarios/info/id/{id}
+- Método: GET
+- Parámetros: Reemplazar {id} con el ID del usuario
+- Respuesta: Nombre del usuario o mensaje de error
+
+### Obtener Info Usuario por Nombre
+- URL: http://localhost:9000/usuarios/info/nombre/{nombre}
+- Método: GET
+- Parámetros: Reemplazar {nombre} con el nombre del usuario
+- Respuesta: ID del usuario o mensaje de error
+
+### Verificar si Usuario Existe
+- URL: http://localhost:9000/usuarios/checkIfExist/{id}
+- Método: GET
+- Parámetros: Reemplazar {id} con el ID del usuario
+- Respuesta: Boolean (true/false)
+
+## Notas Importantes
+
+1. Todos los endpoints devuelven códigos HTTP estándar:
+   - 200: Operación exitosa
+   - 401: Credenciales incorrectas
+   - 404: Usuario no encontrado
+   - 400: Error en la petición
+
+2. Para endpoints que requieren autenticación:
+   - Usar las credenciales en el body de la petición
+   - El formato siempre es "nombre" y "contrasena"
+
+3. Datos de ejemplo para pruebas:
+   - Usuario: "admin"
+   - Contraseña: "admin123" 

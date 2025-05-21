@@ -16,18 +16,10 @@ import java.util.Arrays;
 @RequestMapping("/reservas")
 public class ReservasController {
 
-    //Antigua ruta sin tener eureka
-    //private final String URL_VALIDAR_CREDENCIALES = "http://localhost:8502/usuarios/credenciales";
-
-    /*
-
-    Usar eureka para facilitar las url sin tener que decirle la ip ni el puerto
     @Autowired
     private RestTemplate restTemplate;
 
     private static final String USUARIOS_SERVICE = "usuarios";
-     */
-
 
     private ReservaService reservaServiceImpl;
     private HotelService hotelServiceImpl;
@@ -322,21 +314,19 @@ public class ReservasController {
 
     //Pregunta a microservicio usuarios si los credenciales son validos (nombre de usuario y contraseña)
     private boolean validarEnMicroServicioUsuarios(UserNombreContrasenaDTO userNombreContrasenaDTO) {
-        System.out.println("→ Entramos en validar credenciales donde se pide a usuarios la validacion");
-        String url = "http://localhost:8502/usuarios/validar";
-        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://" + USUARIOS_SERVICE + "/usuarios/validar";
         ResponseEntity<Boolean> response = restTemplate.postForEntity(
                 url, userNombreContrasenaDTO, Boolean.class
         );
-        System.out.println("→ Ya tenemos la respuesta del microservicio de usuarios");
         return Boolean.TRUE.equals(response.getBody());
     }
 
     //Pregunta a usuarios que id corresponde al nombre de usuario que le llega
     private int obtenerIdUsuario(UserNombreContrasenaDTO UserNombreContrasenaDTO) {
-        String url = "http://localhost:8502/usuarios/obtenerId";
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<UserNombreIdDTO> response = restTemplate.postForEntity(url, UserNombreContrasenaDTO, UserNombreIdDTO.class);
+        String url = "http://" + USUARIOS_SERVICE + "/usuarios/obtenerId";
+        ResponseEntity<UserNombreIdDTO> response = restTemplate.postForEntity(
+                url, UserNombreContrasenaDTO, UserNombreIdDTO.class
+        );
         return response.getBody().getId();
     }
 }
