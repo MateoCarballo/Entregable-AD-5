@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 
 public class CambiarEstadoReservaDTO {
-    private String nombreUsuario;
-    private String contrasenaUsuario;
+    private String usuario;
+    private String contrasena;
     private int reserva_id;
-    private String estadoReserva;
+    private String estado;
 }

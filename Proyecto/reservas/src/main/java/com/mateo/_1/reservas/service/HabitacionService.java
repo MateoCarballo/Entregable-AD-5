@@ -1,18 +1,14 @@
 package com.mateo._1.reservas.service;
 
 import com.mateo._1.reservas.dto.ActualizarHabitacionDTO;
-import com.mateo._1.reservas.dto.CheckReservaDTO;
 import com.mateo._1.reservas.dto.CrearHabitacionDTO;
-import com.mateo._1.reservas.dto.UserNombreContrasenaDTO;
 import com.mateo._1.reservas.entity.Habitacion;
 import com.mateo._1.reservas.entity.Hotel;
 import com.mateo._1.reservas.exceptions.HabitacionNotFoundException;
 import com.mateo._1.reservas.exceptions.HotelNotFoundException;
 import com.mateo._1.reservas.repository.HabitacionRepository;
 import com.mateo._1.reservas.repository.HotelRepository;
-import com.mateo._1.reservas.repository.ReservaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,12 +18,10 @@ public class HabitacionService {
 
     private HabitacionRepository habitacionRepositoryImpl;
     private HotelRepository hotelRepositoryImpl;
-    private ReservaRepository reservaRepositoryImpl;
     @Autowired
-    public HabitacionService(HabitacionRepository habitacionRepositoryImpl, HotelRepository hotelRepositoryImpl, ReservaRepository reservaRepositoryImpl) {
+    public HabitacionService(HabitacionRepository habitacionRepositoryImpl, HotelRepository hotelRepositoryImpl) {
         this.habitacionRepositoryImpl = habitacionRepositoryImpl;
         this.hotelRepositoryImpl = hotelRepositoryImpl;
-        this.reservaRepositoryImpl = reservaRepositoryImpl;
     }
 
     public List<Habitacion> devolverTodos() {

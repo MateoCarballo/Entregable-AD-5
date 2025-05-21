@@ -1,7 +1,6 @@
 package com.mateo._1.reservas.controller;
 
 import com.mateo._1.reservas.dto.*;
-import com.mateo._1.reservas.entity.Reserva;
 import com.mateo._1.reservas.service.HabitacionService;
 import com.mateo._1.reservas.service.HotelService;
 import com.mateo._1.reservas.service.ReservaService;
@@ -20,10 +19,15 @@ public class ReservasController {
     //Antigua ruta sin tener eureka
     //private final String URL_VALIDAR_CREDENCIALES = "http://localhost:8502/usuarios/credenciales";
 
-    //Usar eureka para facilitar las url sin tener que decirle la ip ni el puerto
+    /*
+
+    Usar eureka para facilitar las url sin tener que decirle la ip ni el puerto
     @Autowired
     private RestTemplate restTemplate;
-    private static final String URL_VALIDAR_CREDENCIALES = "http://usuarios/usuarios/validar";
+
+    private static final String USUARIOS_SERVICE = "usuarios";
+     */
+
 
     private ReservaService reservaServiceImpl;
     private HotelService hotelServiceImpl;
@@ -71,10 +75,11 @@ public class ReservasController {
      */
     @PostMapping("/habitacion/crear")
     public ResponseEntity<?> crearHabitacion(@RequestBody CrearHabitacionDTO crearHabitacionDTO) {
-        if (!validarCredenciales(crearHabitacionDTO.getUsuario(), crearHabitacionDTO.getContrasena())) return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body("Los credenciales no son correctos.");
-        return ResponseEntity.ok(habitacionServiceImpl.crearHabitacion(crearHabitacionDTO));
+        if (!validarCredenciales(crearHabitacionDTO.getUsuario(), crearHabitacionDTO.getContrasena()))
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Los credenciales no son correctos.");
+         return ResponseEntity.ok(habitacionServiceImpl.crearHabitacion(crearHabitacionDTO));
     }
 
     /*
@@ -88,9 +93,11 @@ public class ReservasController {
 
     @PatchMapping("/habitacion")
     public ResponseEntity<?> actualizarHabitacion(@RequestBody ActualizarHabitacionDTO actualizarHabitacionDTO) {
-        if (!validarCredenciales(actualizarHabitacionDTO.getUsuario(), actualizarHabitacionDTO.getContrasena())) return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body("Los credenciales no son correctos.");;
+        if (!validarCredenciales(actualizarHabitacionDTO.getUsuario(), actualizarHabitacionDTO.getContrasena()))
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Los credenciales no son correctos.");
+        ;
         return ResponseEntity.ok(habitacionServiceImpl.actualizarHabitacion(actualizarHabitacionDTO));
     }
 
@@ -126,9 +133,10 @@ public class ReservasController {
      */
     @PatchMapping("/hotel")
     public ResponseEntity<?> actualizarHotel(@RequestBody ActualizarHotelDTO actualizarHotelDTO) {
-        if (!validarCredenciales(actualizarHotelDTO.getUsuario(), actualizarHotelDTO.getContrasena())) return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body("Los credenciales no son correctos.");
+        if (!validarCredenciales(actualizarHotelDTO.getUsuario(), actualizarHotelDTO.getContrasena()))
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Los credenciales no son correctos.");
         return ResponseEntity.ok(hotelServiceImpl.actualiazarHotel(actualizarHotelDTO));
     }
 
@@ -155,9 +163,10 @@ public class ReservasController {
      */
     @PostMapping("/hotel/id/{nombre}")
     public ResponseEntity<?> obtenerIdApartirNombre(@PathVariable String nombre, @RequestBody UserNombreContrasenaDTO userNombreContrasenaDTO) {
-        if (!validarCredenciales(userNombreContrasenaDTO.getNombre(), userNombreContrasenaDTO.getContrasena())) return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body("Los credenciales no son correctos.");
+        if (!validarCredenciales(userNombreContrasenaDTO.getNombre(), userNombreContrasenaDTO.getContrasena()))
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Los credenciales no son correctos.");
         return ResponseEntity.ok(hotelServiceImpl.obtenerIdApartirNombre(nombre));
     }
 
@@ -172,9 +181,10 @@ public class ReservasController {
 
     @PostMapping("/hotel/nombre/{id}")
     public ResponseEntity<?> obtenerNombreAPartirId(@PathVariable int id, @RequestBody UserNombreContrasenaDTO userNombreContrasenaDTO) {
-        if (!validarCredenciales(userNombreContrasenaDTO.getNombre(), userNombreContrasenaDTO.getContrasena())) return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body("Los credenciales no son correctos.");
+        if (!validarCredenciales(userNombreContrasenaDTO.getNombre(), userNombreContrasenaDTO.getContrasena()))
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Los credenciales no son correctos.");
         return ResponseEntity.ok(hotelServiceImpl.obtenerNombreAPartirId(id));
     }
 
@@ -189,11 +199,22 @@ public class ReservasController {
     */
 
     @PostMapping("/reserva")
-    public ResponseEntity<?> crearReserva(@RequestBody CrearReservaDTO crearReservaDTO) {
-        if (!validarCredenciales(crearReservaDTO.getNombreUsuario(), crearReservaDTO.getContrasenaUsuario())) return ResponseEntity
+    public ResponseEntity<?> crearReserva(@RequestBody CrearReservaDTOEntrada crearReservaDTOEntrada) {
+        if (!validarCredenciales(crearReservaDTOEntrada.getUsuario(), crearReservaDTOEntrada.getContrasena())) return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body("Los credenciales no son correctos.");
-        return ResponseEntity.ok(reservaServiceImpl.crearReserva(crearReservaDTO));
+        /*
+        Por intentar reutilizar me contruyo una dto y le digo que me pregunte el id asociado al nombre para poder crear un nuevo DTO
+        que pasaremos al service y nos creara la nueva entrada en la base de datos
+         */
+        int idUsuario = obtenerIdUsuario(crearDTOUserNombreContrasena(crearReservaDTOEntrada.getUsuario(), crearReservaDTOEntrada.getContrasena()));
+        CrearReservaDTOSalida dtoSalida = CrearReservaDTOSalida.builder()
+                .usuario_id(idUsuario)
+                .habitacion_id(crearReservaDTOEntrada.getHabitacion_id())
+                .fecha_inicio(crearReservaDTOEntrada.getFecha_inicio())
+                .fecha_fin(crearReservaDTOEntrada.getFecha_fin())
+                .build();
+        return ResponseEntity.ok(reservaServiceImpl.crearReserva(dtoSalida));
     }
 
     /*
@@ -206,9 +227,10 @@ public class ReservasController {
      */
     @PatchMapping("/reserva")
     public ResponseEntity<?> cambiarEstado(@RequestBody CambiarEstadoReservaDTO cambiarEstadoReservaDTO) {
-        if (!validarCredenciales(cambiarEstadoReservaDTO.getNombreUsuario(), cambiarEstadoReservaDTO.getContrasenaUsuario())) return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body("Los credenciales no son correctos.");
+        if (!validarCredenciales(cambiarEstadoReservaDTO.getUsuario(), cambiarEstadoReservaDTO.getContrasena()))
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Los credenciales no son correctos.");
         return ResponseEntity.ok(reservaServiceImpl.cambiarEstado(cambiarEstadoReservaDTO));
     }
     /*
@@ -221,13 +243,14 @@ public class ReservasController {
      */
 
     @GetMapping("/reserva")
-    public ResponseEntity<?> listarReservasUsuario(@RequestBody UserNombreContrasenaDTO userNombreContrasenaDTO){
-        if (!validarCredenciales(userNombreContrasenaDTO.getNombre(), userNombreContrasenaDTO.getContrasena())){
+    public ResponseEntity<?> listarReservasUsuario(@RequestBody UserNombreContrasenaDTO userNombreContrasenaDTO) {
+        if (!validarCredenciales(userNombreContrasenaDTO.getNombre(), userNombreContrasenaDTO.getContrasena())) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .body("Los credenciales no son correctos.");
         }
-        return ResponseEntity.ok(reservaServiceImpl.listarReservasPorUsuario(userNombreContrasenaDTO));
+        int idUsuario = obtenerIdUsuario(userNombreContrasenaDTO);
+        return ResponseEntity.ok(reservaServiceImpl.listarReservasPorUsuario(idUsuario));
     }
 
     /*
@@ -240,7 +263,7 @@ public class ReservasController {
     Devolverá una lista con la información de las reservas (fecha_inicio, fecha_fin y habitacion_id).
      */
     @GetMapping("/reserva/{estado}")
-    public ResponseEntity<?> listarReservasSegunEstado(@PathVariable(name = "estado") String estado){
+    public ResponseEntity<?> listarReservasSegunEstado(@PathVariable(name = "estado") String estado) {
         if (!validarEstado(estado)) return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body("El estado no está definido(Confirmada, Pendiente, Cancelada)");
@@ -266,9 +289,9 @@ public class ReservasController {
     public ResponseEntity<?> checkReserva(
             @PathVariable(name = "idUsuario") int idUsuario,
             @PathVariable(name = "idHotel") int idHotel,
-            @PathVariable(name = "idReserva") int idReserva){
+            @PathVariable(name = "idReserva") int idReserva) {
 
-        CheckReservaDTO  checkReservaDTO = new CheckReservaDTO();
+        CheckReservaDTO checkReservaDTO = new CheckReservaDTO();
         checkReservaDTO.setIdUsuario(idUsuario);
         checkReservaDTO.setIdReserva(idReserva);
         checkReservaDTO.setIdHotel(idHotel);
@@ -282,36 +305,39 @@ public class ReservasController {
     //                                          COSAS COMUNES
     //###############################################################################################
 
+    private UserNombreContrasenaDTO crearDTOUserNombreContrasena(String nombre, String contrasena) {
+        return UserNombreContrasenaDTO.builder()
+                .nombre(nombre)
+                .contrasena(contrasena)
+                .build();
+    }
 
-    private boolean validarCredenciales(String nombre, String  contrasena){
+    private boolean validarCredenciales(String nombre, String contrasena) {
         UserNombreContrasenaDTO comprobarCredencialesDTO = UserNombreContrasenaDTO.builder()
                 .nombre(nombre)
                 .contrasena(contrasena)
                 .build();
         return validarEnMicroServicioUsuarios(comprobarCredencialesDTO);
     }
-    private boolean validarEnMicroServicioUsuarios(UserNombreContrasenaDTO userNombreContrasenaDTO){
-        ResponseEntity<Boolean> response = restTemplate.postForEntity(
-                URL_VALIDAR_CREDENCIALES, userNombreContrasenaDTO, Boolean.class
-        );
-        return Boolean.TRUE.equals(response.getBody());
-    }
 
-   /* VALIDAR LOS CREDENCIALES SIN EUREKA
-
-    private boolean validarEnMicroServicioUsuarios(UserNombreContrasenaDTO userNombreContrasenaDTO){
-        //0 INICIALIZAR template para preguntar al microservicio de usuarios
+    //Pregunta a microservicio usuarios si los credenciales son validos (nombre de usuario y contraseña)
+    private boolean validarEnMicroServicioUsuarios(UserNombreContrasenaDTO userNombreContrasenaDTO) {
+        System.out.println("→ Entramos en validar credenciales donde se pide a usuarios la validacion");
+        String url = "http://localhost:8502/usuarios/validar";
         RestTemplate restTemplate = new RestTemplate();
-        //1- Contruir un nuevo dto para validar credenciales
-        UserNombreContrasenaDTO usuario = UserNombreContrasenaDTO.builder()
-                .nombreUsuario(userNombreContrasenaDTO.getNombreUsuario())
-                .contrasenaUsuario(userNombreContrasenaDTO.getContrasenaUsuario())
-                .build();
-        //2 Preguntar al microservicio si son validos o no
-        ResponseEntity<Boolean> response = restTemplate.postForEntity(URL_VALIDAR_CREDENCIALES, usuario, Boolean.class);
-        //Devolver si es o no valido
+        ResponseEntity<Boolean> response = restTemplate.postForEntity(
+                url, userNombreContrasenaDTO, Boolean.class
+        );
+        System.out.println("→ Ya tenemos la respuesta del microservicio de usuarios");
         return Boolean.TRUE.equals(response.getBody());
     }
-    */
+
+    //Pregunta a usuarios que id corresponde al nombre de usuario que le llega
+    private int obtenerIdUsuario(UserNombreContrasenaDTO UserNombreContrasenaDTO) {
+        String url = "http://localhost:8502/usuarios/obtenerId";
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<UserNombreIdDTO> response = restTemplate.postForEntity(url, UserNombreContrasenaDTO, UserNombreIdDTO.class);
+        return response.getBody().getId();
+    }
 }
 

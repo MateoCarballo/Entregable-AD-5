@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="api-gateway" />
         <module name="eureka-server" />
+        <module name="comentarios" />
       </profile>
       <profile name="Annotation profile for proyectos" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -19,14 +20,28 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
         </processorPath>
         <module name="usuarios" />
+      </profile>
+      <profile name="Annotation profile for proyecto" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath>
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.32/lombok-1.18.32.jar" />
+        </processorPath>
         <module name="reservas" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="launcher" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-gateway" options="-parameters" />
+      <module name="comentarios" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
+      <module name="launcher" options="-parameters" />
       <module name="reservas" options="-parameters" />
       <module name="usuarios" options="-parameters" />
     </option>

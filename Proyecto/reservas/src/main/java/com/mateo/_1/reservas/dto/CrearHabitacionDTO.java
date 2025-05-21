@@ -1,6 +1,5 @@
 package com.mateo._1.reservas.dto;
 
-import com.mateo._1.reservas.enums.TipoHabitacion;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

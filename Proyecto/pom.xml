@@ -13,8 +13,8 @@
         <relativePath/> <!-- buscar en repo central -->
     </parent>
 
-    <groupId>com.example</groupId>
-    <artifactId>proyectos</artifactId>
+    <groupId>com.mateo.501</groupId>
+    <artifactId>proyecto</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>Proyecto padre con módulos</description>
@@ -24,6 +24,8 @@
         <module>reservas</module>
         <module>eureka-server</module>
         <module>api-gateway</module>
+        <module>comentarios</module>
+        <module>launcher</module>
     </modules>
 
     <properties>

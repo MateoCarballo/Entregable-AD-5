@@ -8,19 +8,17 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class ApiGatewayApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(ApiGatewayApplication.class, args);
 	}
+
 	@Bean
 	public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
 		return builder.routes()
-				// Aquí defines las rutas hacia los microservicios usando lb://nombre-aplicacion (de Eureka)
 				.route("usuarios", r -> r.path("/usuarios/**")
 						.uri("lb://usuarios"))
 				.route("reservas", r -> r.path("/reservas/**")
 						.uri("lb://reservas"))
-				// Añade más rutas según tus microservicios
 				.build();
 	}
 }
