@@ -4,21 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.5</version>
-		<relativePath/>
-	</parent>
+		<groupId>com.mateo</groupId> <artifactId>proyecto</artifactId> <version>0.0.1-SNAPSHOT</version> <relativePath>../pom.xml</relativePath> </parent>
 
-	<groupId>com.mateo.501</groupId>
 	<artifactId>api-gateway</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>api-gateway</name>
 	<description>Api gateway para el proyecto microservicios</description>
-
-	<properties>
-		<java.version>17</java.version>
-		<spring-cloud.version>2023.0.0</spring-cloud.version> </properties>
 
 	<dependencies>
 		<dependency>
@@ -36,7 +26,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-		</dependency>
+			<scope>provided</scope> </dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -44,17 +34,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-	<dependencyManagement> <dependencies>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-dependencies</artifactId>
-			<version>${spring-cloud.version}</version>
-			<type>pom</type>
-			<scope>import</scope>
-		</dependency>
-	</dependencies>
-	</dependencyManagement>
 
 	<build>
 		<plugins>

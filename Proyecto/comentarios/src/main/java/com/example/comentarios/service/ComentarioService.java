@@ -2,19 +2,24 @@ package com.example.comentarios.service;
 
 import com.example.comentarios.model.*;
 import com.example.comentarios.repository.ComentarioRepository;
-import io.micrometer.common.util.internal.logging.InternalLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class ComentarioService {
+    private static final Logger log = LoggerFactory.getLogger(ComentarioService.class);
+
+    @Autowired // ¡Inyecta el RestTemplate!
+    private RestTemplate restTemplate;
     @Autowired
     private ComentarioRepository comentarioRepository;
 
@@ -26,19 +31,30 @@ public class ComentarioService {
     //    (idUsuario - idHotel - idReserva) no se podrá realizar el comentario.
 
     public CreateComentarioPayload crearComentario(CreateComentarioInput input) {
-        InternalLogger log = null;
         //credenciales DTO y configuración inicial de URL
+       /* Asi sin usar lo que esta en el paquete config
+
         //TODO Puedo crear una sola ? de ser asi por que es mejor inyectarla ?
         RestTemplate restTemplate = new RestTemplate();
 
         // TODO revisar la ruta del servicio
-        String urlMicroservicioUsuarios = "http://localhost:80501/usuarios";
+        String urlMicroservicioUsuarios = "http://localhost:8502/usuarios";
         String endpointObtenerId = "/obtenerId";
 
         // TODO revisar la ruta del servicio
-        String urlMicroservicioReservas = "http://localhost:80502/reservas";
+        String urlMicroservicioReservas = "http://localhost:8501/reservas";
         String endpointObtenerIdPorNombre = "/hotel/id/%s".formatted(input.getNombreHotel());
         String endPointCheckReserva = "/reservas/check/%d-%d-%d";
+        */
+        // Aqui como hacerlo con el restTemplate con loadbalance
+        // Usa los nombres de los servicios registrados en Eureka
+        String urlMicroservicioUsuarios = "http://usuarios"; // ¡Aquí el cambio!
+        String endpointObtenerId = "/usuarios/obtenerId"; // Este path sigue siendo el de tu controlador de usuarios
+
+        String urlMicroservicioReservas = "http://reservas"; // ¡Aquí el cambio!
+        String endpointObtenerIdPorNombre = "/reservas/hotel/id/%s".formatted(input.getNombreHotel()); // Asegúrate de que el path base del controlador de Reservas sea /reservas
+        String endPointCheckReserva = "/reservas/check/%d-%d-%d";
+
 
         int idUsuario;
         int idHotel;

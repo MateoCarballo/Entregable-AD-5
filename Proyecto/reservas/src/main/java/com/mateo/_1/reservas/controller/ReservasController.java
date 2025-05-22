@@ -309,7 +309,7 @@ public class ReservasController {
 
     //Pregunta a microservicio usuarios si los credenciales son validos (nombre de usuario y contraseña)
     private boolean validarEnMicroServicioUsuarios(UserNombreContrasenaDTO userNombreContrasenaDTO) {
-        String url = "http://localhost:8502/usuarios/validar";
+        String url = "http://localhost:8502/usuarios/credenciales";
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Boolean> response = restTemplate.postForEntity(
                 url, userNombreContrasenaDTO, Boolean.class

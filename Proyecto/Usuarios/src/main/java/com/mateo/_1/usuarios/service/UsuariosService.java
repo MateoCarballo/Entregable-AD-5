@@ -13,6 +13,7 @@ import java.util.List;
 
 @Service
 public class UsuariosService {
+
     private final UsuariosRepository usuariosRepositoryImpl;
 
     public List<Usuario> obtenerTodosLosUsuarios() {
@@ -26,6 +27,9 @@ public class UsuariosService {
     }
 
     public String registrarUsuario(RegistroUsuarioDTO registroUsuarioDTO) {
+        Usuario buscarUsuario = usuariosRepositoryImpl.findByNombre(registroUsuarioDTO.getNombre()).orElse(null);
+        if (buscarUsuario != null) return "Este usuario ya está registrado";
+
         Usuario usuario = Usuario.builder()
                 .nombre(registroUsuarioDTO.getNombre())
                 .correo_electronico(registroUsuarioDTO.getCorreo_electronico())
