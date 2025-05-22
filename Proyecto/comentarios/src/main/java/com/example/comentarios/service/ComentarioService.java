@@ -87,7 +87,6 @@ public class ComentarioService {
         }
 
         Comentario comentarioNuevo = Comentario.builder()
-                .id(UUID.randomUUID().toString())
                 .usuarioId(idUsuario)
                 .hotelId(idHotel)
                 .reservaId(input.getIdReserva())

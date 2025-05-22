@@ -18,15 +18,17 @@ input CreateComentarioInput{
     contrasena: String
 }
 
-type CreateComentarioPayLoad {
+type CrearComentarioPayLoad {
     message: String
     comentario: Comentario
 }
 
-   
-
 type Query{
     getComentarios: [Comentario!]!
+}
+
+type Mutation {
+    crearComentario(input: CreateComentarioInput!): CrearComentarioPayLoad
 }
 
 
