@@ -12,19 +12,5 @@ public class ReservasApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ReservasApplication.class, args);
 	}
-	@Bean
-	@LoadBalanced
-	public RestTemplate restTemplate() {
-		return new RestTemplate();
-	}
-}
 
-/*
-@SpringBootApplication
-@EnableDiscoveryClient
-public class ReservasApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(ReservasApplication.class, args);
-	}
 }
- */

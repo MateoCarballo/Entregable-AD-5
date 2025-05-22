@@ -14,69 +14,47 @@ public class ComentarioController {
     @Autowired
     private ComentarioService comentarioService;
 
+    /*
     @MutationMapping
-    public Comentario crearComentario(@Argument ComentarioInput input) {
-        return comentarioService.crearComentario(
-            input.getNombreHotel(),
-            input.getReservaId(),
-            input.getPuntuacion(),
-            input.getComentario(),
-            input.getUsuario(),
-            input.getContrasena()
-        );
+    public Comentario crearComentario() {
+        return comentarioService.crearComentario();
     }
+     */
 
     @MutationMapping
     public String eliminarComentarios() {
         return comentarioService.eliminarComentarios();
     }
-
-    @MutationMapping
-    public String eliminarComentarioDeUsuario(@Argument String id, 
-                                            @Argument String usuario, 
-                                            @Argument String contrasena) {
-        return comentarioService.eliminarComentarioDeUsuario(id, usuario, contrasena);
-    }
-
-    @QueryMapping
-    public List<Comentario> listarComentariosHotel(@Argument String nombreHotel, 
-                                                  @Argument String usuario, 
-                                                  @Argument String contrasena) {
-        return comentarioService.listarComentariosHotel(nombreHotel, usuario, contrasena);
-    }
-
-    @QueryMapping
-    public List<Comentario> listarComentariosUsuario(@Argument String usuario, 
-                                                    @Argument String contrasena) {
-        return comentarioService.listarComentariosUsuario(usuario, contrasena);
-    }
-
-    @QueryMapping
-    public Comentario mostrarComentarioUsuarioReserva(@Argument Integer reservaId, 
-                                                     @Argument String usuario, 
-                                                     @Argument String contrasena) {
-        return comentarioService.mostrarComentarioUsuarioReserva(reservaId, usuario, contrasena);
-    }
-
-    @QueryMapping
-    public Double puntuacionMediaHotel(@Argument String nombreHotel, 
-                                     @Argument String usuario, 
-                                     @Argument String contrasena) {
-        return comentarioService.puntuacionMediaHotel(nombreHotel, usuario, contrasena);
-    }
-
-    @QueryMapping
-    public Double puntuacionesMediasUsuario(@Argument String usuario, 
-                                          @Argument String contrasena) {
-        return comentarioService.puntuacionesMediasUsuario(usuario, contrasena);
-    }
 }
+/*
+    @MutationMapping
+    public String eliminarComentarioDeUsuario() {
+        return comentarioService.eliminarComentarioDeUsuario();
+    }
 
-record ComentarioInput(
-    String nombreHotel,
-    Integer reservaId,
-    Double puntuacion,
-    String comentario,
-    String usuario,
-    String contrasena
-) {} 
+    @QueryMapping
+    public List<Comentario> listarComentariosHotel() {
+        return comentarioService.listarComentariosHotel();
+    }
+
+    @QueryMapping
+    public List<Comentario> listarComentariosUsuario() {
+        return comentarioService.listarComentariosUsuario();
+    }
+
+    @QueryMapping
+    public Comentario mostrarComentarioUsuarioReserva() {
+        return comentarioService.mostrarComentarioUsuarioReserva();
+    }
+
+    @QueryMapping
+    public Double puntuacionMediaHotel() {
+        return comentarioService.puntuacionMediaHotel();
+    }
+
+    @QueryMapping
+    public Double puntuacionesMediasUsuario() {
+        return comentarioService.puntuacionesMediasUsuario();
+    }
+
+ */

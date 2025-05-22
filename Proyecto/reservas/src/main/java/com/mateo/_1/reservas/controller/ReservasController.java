@@ -16,11 +16,6 @@ import java.util.Arrays;
 @RequestMapping("/reservas")
 public class ReservasController {
 
-    @Autowired
-    private RestTemplate restTemplate;
-
-    private static final String USUARIOS_SERVICE = "usuarios";
-
     private ReservaService reservaServiceImpl;
     private HotelService hotelServiceImpl;
     private HabitacionService habitacionServiceImpl;
@@ -38,7 +33,7 @@ public class ReservasController {
         return ResponseEntity.ok("Todo ok");
     }
 
-    // EndPoint para poder consultar todos los datos desde postman
+    // EndPoint para poder consultar todos los datos desde postman en cada uno
     @GetMapping("/habitacion/All")
     public ResponseEntity<?> habitaciontest() {
         return ResponseEntity.ok(habitacionServiceImpl.devolverTodos());
@@ -314,7 +309,8 @@ public class ReservasController {
 
     //Pregunta a microservicio usuarios si los credenciales son validos (nombre de usuario y contraseña)
     private boolean validarEnMicroServicioUsuarios(UserNombreContrasenaDTO userNombreContrasenaDTO) {
-        String url = "http://" + USUARIOS_SERVICE + "/usuarios/validar";
+        String url = "http://localhost:8502/usuarios/validar";
+        RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Boolean> response = restTemplate.postForEntity(
                 url, userNombreContrasenaDTO, Boolean.class
         );
@@ -323,10 +319,9 @@ public class ReservasController {
 
     //Pregunta a usuarios que id corresponde al nombre de usuario que le llega
     private int obtenerIdUsuario(UserNombreContrasenaDTO UserNombreContrasenaDTO) {
-        String url = "http://" + USUARIOS_SERVICE + "/usuarios/obtenerId";
-        ResponseEntity<UserNombreIdDTO> response = restTemplate.postForEntity(
-                url, UserNombreContrasenaDTO, UserNombreIdDTO.class
-        );
+        String url = "http://localhost:8502/usuarios/obtenerId";
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<UserNombreIdDTO> response = restTemplate.postForEntity(url, UserNombreContrasenaDTO, UserNombreIdDTO.class);
         return response.getBody().getId();
     }
 }
