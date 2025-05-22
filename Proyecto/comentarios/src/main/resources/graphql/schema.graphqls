@@ -24,43 +24,10 @@ type CrearComentarioPayLoad {
 }
 
 type Query{
-    getComentarios: [Comentario!]!
+    getComentarios: [Comentario]
 }
 
 type Mutation {
     crearComentario(input: CreateComentarioInput!): CrearComentarioPayLoad
+    eliminarComentarios:String
 }
-
-
-#type Comentario {
-#    id: ID!
-#    usuarioId: Int!
-#    hotelId: Int!
-#    reservaId: Int!
-#    puntuacion: Float!
-#    comentario: String!
-#    fechaCreacion: String!
-#}
-#
-#input ComentarioInput {
-#    nombreHotel: String!
-#    reservaId: Int!
-#    puntuacion: Float!
-#    comentario: String!
-#    usuario: String!
-#    contrasena: String!
-#}
-#
-#type Query {
-#    listarComentariosHotel(nombreHotel: String!, usuario: String!, contrasena: String!): [Comentario]
-#    listarComentariosUsuario(usuario: String!, contrasena: String!): [Comentario]
-#    mostrarComentarioUsuarioReserva(reservaId: Int!, usuario: String!, contrasena: String!): Comentario
-#    puntuacionMediaHotel(nombreHotel: String!, usuario: String!, contrasena: String!): Float
-#    puntuacionesMediasUsuario(usuario: String!, contrasena: String!): Float
-#}
-#
-#type Mutation {
-#    crearComentario(input: ComentarioInput!): Comentario
-#    eliminarComentarios: String
-#    eliminarComentarioDeUsuario(id: ID!, usuario: String!, contrasena: String!): String
-#}
