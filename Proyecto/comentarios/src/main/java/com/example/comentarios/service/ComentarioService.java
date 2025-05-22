@@ -1,15 +1,15 @@
 package com.example.comentarios.service;
 
-import com.example.comentarios.model.Comentario;
-import com.example.comentarios.model.CreateComentarioInput;
-import com.example.comentarios.model.CreateComentarioPayload;
+import com.example.comentarios.model.*;
 import com.example.comentarios.repository.ComentarioRepository;
+import io.micrometer.common.util.internal.logging.InternalLogger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,20 +18,85 @@ public class ComentarioService {
     @Autowired
     private ComentarioRepository comentarioRepository;
 
+    //    Consultará el microservicio de reservas para obtener el id de hotel a partir del nombreHotel.
+    //    Consultará el microservicio de usuarios para obtener el id de usuario a partir del nombre de usuario.
+    //    Deberá comprobar frente al microservicio reservas (mét0do checkReserva) si la combinación
+    //    (idUsuario - idHotel - idReserva) existe antes de poder crear el comentario.
+    //    Si el usuario ya hizo un comentario sobre esa combinación
+    //    (idUsuario - idHotel - idReserva) no se podrá realizar el comentario.
+
     public CreateComentarioPayload crearComentario(CreateComentarioInput input) {
+        InternalLogger log = null;
+        //credenciales DTO y configuración inicial de URL
+        //TODO Puedo crear una sola ? de ser asi por que es mejor inyectarla ?
+        RestTemplate restTemplate = new RestTemplate();
 
-        // Realizar operaciones de validacion del usuario
+        // TODO revisar la ruta del servicio
+        String urlMicroservicioUsuarios = "http://localhost:80501/usuarios";
+        String endpointObtenerId = "/obtenerId";
 
-        Comentario comentario = Comentario.builder()
+        // TODO revisar la ruta del servicio
+        String urlMicroservicioReservas = "http://localhost:80502/reservas";
+        String endpointObtenerIdPorNombre = "/hotel/id/%s".formatted(input.getNombreHotel());
+        String endPointCheckReserva = "/reservas/check/%d-%d-%d";
+
+        int idUsuario;
+        int idHotel;
+        boolean checkReserva;
+
+        UserNombreContrasenaDTO credenciales = UserNombreContrasenaDTO.builder()
+                .nombre(input.getUsuario())
+                .contrasena(input.getContrasena())
+                .build();
+
+        try {
+            //1. Obtener el id del usuario llamando al microservicio de usuarios @PostMapping("/obtenerId")
+            ResponseEntity<UserNombreIdDTO> responseUserId = restTemplate
+                    .postForEntity(urlMicroservicioUsuarios + endpointObtenerId, credenciales, UserNombreIdDTO.class);
+            idUsuario = responseUserId.getBody().getId();
+        } catch (HttpClientErrorException exception) {
+            log.error("Error al buscar el id del usuario", exception);
+            return new CreateComentarioPayload("Error al buscar el id del usuario", new Comentario());
+        }
+
+        try {
+            //2. Obtener el idHotel llamando al microservicio de reservas @PostMapping("/hotel/id/{nombre}")
+            ResponseEntity<String> responseHotelId = restTemplate
+                    .postForEntity(urlMicroservicioReservas + endpointObtenerIdPorNombre, credenciales, String.class);
+            idHotel = Integer.parseInt(responseHotelId.getBody().toString());
+        } catch (HttpClientErrorException exception) {
+            log.error("Error al buscar el id del usuario", exception);
+            return new CreateComentarioPayload("Error al buscar el id del hotel", new Comentario());
+        }
+
+        try {
+            //3.1. Comprobar en reservas si la combinacion es correcta /check/{idUsuario}-{idHotel}-{idReserva}"
+            ResponseEntity<Boolean> responseCheckReserva = restTemplate
+                    .postForEntity(urlMicroservicioReservas + endPointCheckReserva.formatted(idUsuario, idHotel, input.getIdReserva()), null, Boolean.class);
+            checkReserva = responseCheckReserva.getBody();
+            if (!checkReserva) return new CreateComentarioPayload("Los ids no coinciden con ninguna reserva",new Comentario());
+        } catch (HttpClientErrorException exception) {
+            log.error("Error al buscar el id del usuario", exception);
+            return new CreateComentarioPayload("Error al buscar al comprobar la reserva", new Comentario());
+        }
+
+        Comentario comentarioEncontrado = comentarioRepository.findByUsuarioIdAndHotelIdAndReservaId(idUsuario, idHotel, input.getIdReserva()); // Todo puedo usar las construcciones con formato como desde MySQL
+
+        if (comentarioEncontrado != null) {
+            return new CreateComentarioPayload("Ya tienes un comentario creado sobre esta reserva", comentarioEncontrado);
+        }
+
+        Comentario comentarioNuevo = Comentario.builder()
                 .id(UUID.randomUUID().toString())
-                .usuarioId(1)
-                .hotelId(1)
+                .usuarioId(idUsuario)
+                .hotelId(idHotel)
                 .reservaId(input.getIdReserva())
-                .puntuacion(1.11)
+                .puntuacion(input.getPuntuacion())
                 .comentario(input.getComentario())
                 .fechaCreacion(LocalDateTime.now())
                 .build();
-        Comentario comentarioGuardado = comentarioRepository.save(comentario);
+
+        Comentario comentarioGuardado = comentarioRepository.save(comentarioNuevo);
 
         return new CreateComentarioPayload("Comentario creado con exito", comentarioGuardado);
     }

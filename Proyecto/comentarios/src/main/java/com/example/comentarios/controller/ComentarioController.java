@@ -17,6 +17,18 @@ public class ComentarioController {
     private ComentarioService comentarioService;
 
 
+//    Crear comentario (crearComentario):
+//
+//    Se encargará de crear y almacenar el comentario de un usuario sobre una reserva en un determinado hotel.
+//    Recibirá un objeto con la información del comentario (nombreHotel, id de reserva, puntuación y comentario)
+//    Devolverá el mismo objeto recibido a modo de confirmación.
+//    Consultará el microservicio de reservas para obtener el id de hotel a partir del nombreHotel.
+//    Consultará el microservicio de usuarios para obtener el id de usuario a partir del nombre de usuario.
+//    Deberá comprobar frente al microservicio reservas (mét0do checkReserva) si la combinación
+//    (idUsuario - idHotel - idReserva) existe antes de poder crear el comentario.
+//    Si el usuario ya hizo un comentario sobre esa combinación
+//    (idUsuario - idHotel - idReserva) no se podrá realizar el comentario.
+
     @MutationMapping
     public CreateComentarioPayload crearComentario(@Argument CreateComentarioInput input) {
         return comentarioService.crearComentario(input);

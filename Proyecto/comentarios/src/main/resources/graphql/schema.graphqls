@@ -20,13 +20,10 @@ input CreateComentarioInput{
 
 type CreateComentarioPayLoad {
     message: String
-    comentario: Comentario!
+    comentario: Comentario
 }
 
-type Mutation{
-    eliminarComentarios: String!
-    crearComentario(input: CreateComentarioInput!): CreateComentarioPayLoad! # El tipo de retorno debe coincidir con el PayLoad
-}
+   
 
 type Query{
     getComentarios: [Comentario!]!

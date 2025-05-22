@@ -5,4 +5,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface ComentarioRepository extends MongoRepository<Comentario, String> {
-} 
+    Comentario findByUsuarioIdAndHotelIdAndReservaId(Integer usuarioId, Integer hotelId, Integer reservaId);
+}

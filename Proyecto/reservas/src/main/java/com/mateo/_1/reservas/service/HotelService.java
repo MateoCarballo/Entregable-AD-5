@@ -60,10 +60,10 @@ public class HotelService {
     }
 
     public String obtenerIdApartirNombre(String  nombre) {
-        //TODO Preguntar Jose esta bien definir las personalizadas asi ?
         Hotel hotel =  (Hotel)hotelRepositoryImpl.findByNombre(nombre)
                 .orElseThrow(()-> new HotelNotFoundException("Hotel con nombre " + nombre + " no encontrado"));
-        return  "El id " + hotel.getId() + " corresponder al hotel " +nombre;
+        //return  "El id " + hotel.getId() + " corresponder al hotel " +nombre; ----> Estaba asi pero para poder reutilizarlo en la llamada desde comentarios lo deje con solo la cadena
+        return  String.valueOf(hotel.getId());
     }
 
     public String obtenerNombreAPartirId(int idHotel) {
