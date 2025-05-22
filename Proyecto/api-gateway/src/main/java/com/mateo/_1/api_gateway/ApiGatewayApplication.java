@@ -19,6 +19,8 @@ public class ApiGatewayApplication {
 						.uri("lb://usuarios"))
 				.route("reservas", r -> r.path("/reservas/**")
 						.uri("lb://reservas"))
+				.route("comentarios", r -> r.path("/comentarios/**") // <--- AÑADE ESTA LÍNEA
+						.uri("lb://comentarios")) // <--- ASEGÚRATE DE QUE "COMENTARIOS" ES EL spring.application.name de tu microservicio de comentarios
 				.build();
 	}
 }

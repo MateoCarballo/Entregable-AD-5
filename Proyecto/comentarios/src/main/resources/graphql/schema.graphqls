@@ -1,32 +1,67 @@
-type Comentario {
-    id: ID!
-    usuarioId: Int!
-    hotelId: Int!
-    reservaId: Int!
-    puntuacion: Float!
-    comentario: String!
-    fechaCreacion: String!
+type Comentario{
+    id: ID
+    usuarioId: Int
+    hotelId: Int
+    reservaId: Int
+    puntuacion: Float
+    comentario: String
+    fechaCreacion: String
 }
 
-input ComentarioInput {
-    nombreHotel: String!
-    reservaId: Int!
-    puntuacion: Float!
-    comentario: String!
-    usuario: String!
-    contrasena: String!
+# Aqui podriamos sustituir input por type pero limitaria el poder usarlo como respuesta
+input CreateComentarioInput{
+    nombreHotel: String
+    idReserva: Int
+    puntuacion: Float
+    comentario: String
+    usuario: String
+    contrasena: String
 }
 
-type Query {
-    listarComentariosHotel(nombreHotel: String!, usuario: String!, contrasena: String!): [Comentario]
-    listarComentariosUsuario(usuario: String!, contrasena: String!): [Comentario]
-    mostrarComentarioUsuarioReserva(reservaId: Int!, usuario: String!, contrasena: String!): Comentario
-    puntuacionMediaHotel(nombreHotel: String!, usuario: String!, contrasena: String!): Float
-    puntuacionesMediasUsuario(usuario: String!, contrasena: String!): Float
+type CreateComentarioPayLoad {
+    message: String
+    comentario: Comentario!
 }
 
-type Mutation {
-    crearComentario(input: ComentarioInput!): Comentario
-    eliminarComentarios: String
-    eliminarComentarioDeUsuario(id: ID!, usuario: String!, contrasena: String!): String
-} 
+type Mutation{
+    eliminarComentarios: String!
+    crearComentario(input: CreateComentarioInput!): CreateComentarioPayLoad! # El tipo de retorno debe coincidir con el PayLoad
+}
+
+type Query{
+    getComentarios: [Comentario!]!
+}
+
+
+#type Comentario {
+#    id: ID!
+#    usuarioId: Int!
+#    hotelId: Int!
+#    reservaId: Int!
+#    puntuacion: Float!
+#    comentario: String!
+#    fechaCreacion: String!
+#}
+#
+#input ComentarioInput {
+#    nombreHotel: String!
+#    reservaId: Int!
+#    puntuacion: Float!
+#    comentario: String!
+#    usuario: String!
+#    contrasena: String!
+#}
+#
+#type Query {
+#    listarComentariosHotel(nombreHotel: String!, usuario: String!, contrasena: String!): [Comentario]
+#    listarComentariosUsuario(usuario: String!, contrasena: String!): [Comentario]
+#    mostrarComentarioUsuarioReserva(reservaId: Int!, usuario: String!, contrasena: String!): Comentario
+#    puntuacionMediaHotel(nombreHotel: String!, usuario: String!, contrasena: String!): Float
+#    puntuacionesMediasUsuario(usuario: String!, contrasena: String!): Float
+#}
+#
+#type Mutation {
+#    crearComentario(input: ComentarioInput!): Comentario
+#    eliminarComentarios: String
+#    eliminarComentarioDeUsuario(id: ID!, usuario: String!, contrasena: String!): String
+#}
