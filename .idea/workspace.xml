@@ -5,27 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c063f6bc-7516-4789-9094-d482d0bdc78a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/comentarios/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/comentarios/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/comentarios/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/comentarios/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka-server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka-server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reservas/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/reservas/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/reservas/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/reservas/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts databases/Script_Comentarios.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scripts databases/Script_Comentarios.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts databases/Script_Reservas.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts databases/Script_Usuarios.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/usuarios/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/usuarios/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/usuarios/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/usuarios/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -71,7 +53,7 @@
     "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.EurekaServerApplication">
+  <component name="RunManager" selected="Application.ApiGatewayApplication">
     <configuration name="ApiGatewayApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.mateo._1.api_gateway.ApiGatewayApplication" />
       <module name="api-gateway" />
@@ -139,11 +121,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.EurekaServerApplication" />
         <item itemvalue="Application.ApiGatewayApplication" />
         <item itemvalue="Application.ComentariosApplication" />
         <item itemvalue="Application.ReservasApplication" />
         <item itemvalue="Application.UsuariosApplication" />
+        <item itemvalue="Application.EurekaServerApplication" />
       </list>
     </recent_temporary>
   </component>
