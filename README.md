@@ -7,7 +7,7 @@ Este proyecto implementa un sistema de reservas y comentarios utilizando una arq
 
 ## Módulos Implementados
 
-1. **[Servidor Eureka](./eureka/)Servidor Eureka (Puerto: 8500)**
+1. **[Servidor Eureka](./eureka-server/)Servidor Eureka (Puerto: 8500)**
    - Registro y descubrimiento de servicios
    - Gestión de la comunicación entre microservicios
 
