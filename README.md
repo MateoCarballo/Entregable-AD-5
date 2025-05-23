@@ -7,26 +7,26 @@ Este proyecto implementa un sistema de reservas y comentarios utilizando una arq
 
 ## Módulos Implementados
 
-1. **Servidor Eureka (Puerto: 8500)**
+1. **[Servidor Eureka](./eureka/)Servidor Eureka (Puerto: 8500)**
    - Registro y descubrimiento de servicios
    - Gestión de la comunicación entre microservicios
 
-2. **API Gateway (Puerto: 8080)**
+2. **[API Gateway](./api-gateway/) (Puerto: 8080)**
    - Punto de entrada al sistema
    - Enrutamiento de peticiones a los microservicios
 
-3. **Servicio de Usuarios (Puerto: 8502)**
+3. **[Servicio de Usuarios](./usuarios/) (Puerto: 8502)**
    - Gestión de usuarios del sistema
    - API REST para operaciones CRUD de usuarios
    - Base de datos MySQL
 
-4. **Servicio de Reservas (Puerto: 8501)**
+4. **[Servicio de Reservas](./reservas/) (Puerto: 8501)**
    - Gestión de hoteles, habitaciones y reservas
    - Sistema de reservas
    - API REST
    - Base de datos MySQL
 
-5. **Servicio de Comentarios (Puerto: 8503)**
+5. **[Servicio de Comentarios](./comentarios/) (Puerto: 8503)**
    - Gestión de comentarios 
    - API GraphQL
    - Base de datos MongoDB
