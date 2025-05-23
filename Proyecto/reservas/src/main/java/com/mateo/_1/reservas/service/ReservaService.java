@@ -73,7 +73,6 @@ public class ReservaService {
             return "EstadoReserva inválido: " + estadoNuevoStr + ". Los valores válidos son: " + Arrays.toString(EstadoReserva.values());
         }
         */
-
         reserva.setEstado(cambiarEstadoReservaDTO.getEstado());
 
         //5- Guardar la nueva reserva

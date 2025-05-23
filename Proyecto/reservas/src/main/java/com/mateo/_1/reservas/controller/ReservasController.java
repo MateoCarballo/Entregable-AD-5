@@ -89,7 +89,11 @@ public class ReservasController {
     }
 
     @DeleteMapping("/habitacion/{id}")
-    public ResponseEntity<?> eliminarHabitacion(@PathVariable int id) {
+    public ResponseEntity<?> eliminarHabitacion(@PathVariable int id, @RequestBody UserNombreContrasenaDTO userNombreContrasenaDTO) {
+        if (!validarCredenciales(userNombreContrasenaDTO.getNombre(), userNombreContrasenaDTO.getContrasena()))
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Los credenciales no son correctos.");
         return ResponseEntity.ok(habitacionServiceImpl.eliminarHabitacion(id));
     }
 
@@ -136,7 +140,11 @@ public class ReservasController {
     Devolverá una cadena indicando si la operación se completó correctamente o si hubo algún fallo.
      */
     @DeleteMapping("/hotel/{id}")
-    public ResponseEntity<?> eliminarHotel(@PathVariable int id) {
+    public ResponseEntity<?> eliminarHotel(@PathVariable int id, @RequestBody UserNombreContrasenaDTO userNombreContrasenaDTO) {
+        if (!validarCredenciales(userNombreContrasenaDTO.getNombre(), userNombreContrasenaDTO.getContrasena()))
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Los credenciales no son correctos.");
         return ResponseEntity.ok(hotelServiceImpl.eliminarHotel(id));
     }
 

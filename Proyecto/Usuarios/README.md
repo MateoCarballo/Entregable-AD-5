@@ -67,7 +67,10 @@ http://localhost:8080/usuarios
     "contrasena": "clave123"
 }
 ```
-- **Respuesta**: Boolean indicando si es válido
+- **Respuesta**: 
+```java
+true / false
+```
 
 ### 5. Obtener Info Usuario por ID
 - **URL**: `/info/id/{id}`
@@ -85,4 +88,8 @@ http://localhost:8080/usuarios
 - **URL**: `/checkIfExist/{id}`
 - **Método**: `GET`
 - **Parámetros**: `id` en la URL
-- **Respuesta**: Boolean indicando si existe 
+- **Respuesta**: 
+- **Respuesta**: 
+```java
+true / false
+```
