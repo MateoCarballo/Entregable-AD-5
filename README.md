@@ -34,6 +34,7 @@ Este proyecto implementa un sistema de reservas y comentarios utilizando una arq
    Cada modulo tiene su propio readme para probar los endpoint. 
    Los datos cargados en las bases de datos mysql y mongo son proporcionados por el profesor.
    Puedes encontrarlos en la carpeta `scripts databases`
+   Puedes encontrarlos en la carpeta [scripts databases](./scripts%20databases/)
 
 ## Tecnologías Utilizadas
 
