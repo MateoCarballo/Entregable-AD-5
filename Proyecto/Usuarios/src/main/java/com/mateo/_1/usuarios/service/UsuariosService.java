@@ -20,7 +20,6 @@ public class UsuariosService {
         return usuariosRepositoryImpl.findAll();
     }
 
-
     @Autowired
     public UsuariosService(UsuariosRepository usuariosRepositoryImpl) {
         this.usuariosRepositoryImpl = usuariosRepositoryImpl;
@@ -83,8 +82,9 @@ public class UsuariosService {
         return String.valueOf(u.getId());
     }
 
-    public Usuario validarNombreConstrasena(String nombre, String clave) {
-        return usuariosRepositoryImpl.findByNombreAndContrasena(nombre, clave).orElse(null);
+    public boolean validarNombreConstrasena(String nombre, String contrasena) {
+        //return usuariosRepositoryImpl.findByNombreAndContrasena(nombre, clave).orElse(null);
+        return usuariosRepositoryImpl.existsByNombreAndContrasena(nombre,contrasena);
     }
 
     public Usuario comprobarId(int id) {

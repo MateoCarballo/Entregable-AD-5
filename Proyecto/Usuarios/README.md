@@ -19,7 +19,10 @@ http://localhost:8080/usuarios
     "contrasena": "clave123"
 }
 ```
-- **Respuesta**: String con el resultado de la operación
+- **Respuesta**: 
+```java
+ "Nuevo usuario guardado con id 12" 
+ ```
 
 ### 2. Actualizar Usuario
 - **URL**: `/registrar`
@@ -34,7 +37,10 @@ http://localhost:8080/usuarios
     "contrasena": "nuevaclave123"
 }
 ```
-- **Respuesta**: String con el resultado de la operación
+- **Respuesta**: 
+```java
+"Usuario modificado con exito"
+```
 
 ### 3. Eliminar Usuario
 - **URL**: `/`
@@ -46,7 +52,10 @@ http://localhost:8080/usuarios
     "contrasena": "clave123"
 }
 ```
-- **Respuesta**: String con el resultado de la operación
+- **Respuesta**: 
+```java
+"Usuario eliminado con exito"
+```
 
 ### 4. Validar Usuario
 - **URL**: `/validar`

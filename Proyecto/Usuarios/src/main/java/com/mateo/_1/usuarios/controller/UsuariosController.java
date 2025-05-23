@@ -72,18 +72,13 @@ public class UsuariosController {
 
     @PostMapping("/validar")
     public ResponseEntity<Boolean> validarUsuario(@RequestBody UserNombreContrasenaDTO userNombreContrasenaDto) {
-        boolean responseOk = false;
-        Usuario queryResult = usuariosServiceImpl.validarNombreConstrasena(userNombreContrasenaDto.getNombre(), userNombreContrasenaDto.getContrasena());
-        if (queryResult != null) {
-            responseOk = true;
-        }
-        return ResponseEntity.ok(responseOk);
+        return ResponseEntity.ok(usuariosServiceImpl.validarNombreConstrasena(userNombreContrasenaDto.getNombre(), userNombreContrasenaDto.getContrasena()));
     }
 
     @GetMapping("/info/id/{id}")
-    public ResponseEntity<String> obtenerInfoUsuarioPorId(@PathVariable("id") int user_id) {
+    public ResponseEntity<String> obtenerInfoUsuarioPorId(@PathVariable int id) {
         String userName = "No se ha encontrado ningun usuario con el id proporcionado";
-        Usuario user = usuariosServiceImpl.obtenerUsuarioPorId(user_id);
+        Usuario user = usuariosServiceImpl.obtenerUsuarioPorId(id);
         if (user != null) {
             userName = user.getNombre();
         }
@@ -104,5 +99,4 @@ public class UsuariosController {
         }
         return ResponseEntity.ok(exist);
     }
-
-    }
+}

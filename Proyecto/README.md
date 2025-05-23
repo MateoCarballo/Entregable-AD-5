@@ -18,13 +18,13 @@ Este proyecto implementa un sistema de reservas y comentarios utilizando una arq
    - Base de datos MySQL
 
 4. **Servicio de Reservas (Puerto: 8501)**
-   - Gestión de hoteles y habitaciones
+   - Gestión de hoteles, habitaciones y reservas
    - Sistema de reservas
    - API REST
    - Base de datos MySQL
 
 5. **Servicio de Comentarios (Puerto: 8503)**
-   - Gestión de comentarios y valoraciones
+   - Gestión de comentarios 
    - API GraphQL
    - Base de datos MongoDB
 
